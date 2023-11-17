@@ -4,7 +4,7 @@ import React from "react";
 const Auth = ({ children }) => {
   return (
     <Center h={"100vh"} w={"100vw"} bgColor={"gray.100"}>
-      <Box maxW={"36vw"} w={"36vw"} bgColor={"gray.50"} rounded={12}>
+      <Box w={{ base: "80vw", md: "36vw" }} bgColor={"gray.50"} rounded={12}>
         {children}
       </Box>
     </Center>
