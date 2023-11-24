@@ -1,20 +1,32 @@
 "use client";
 
 import React, { Fragment } from "react";
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink } from "@chakra-ui/react";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  Text,
+} from "@chakra-ui/react";
 import { AiOutlineDoubleRight } from "react-icons/ai";
 const DBreadcrumb = ({ links }) => {
   return (
-    <Breadcrumb>
+    <Breadcrumb flexWrap={"wrap"} overflow={"hidden"} maxW={"75vw"}>
       <AiOutlineDoubleRight />
       {links.map((item, i) => {
+        // console.log(i, links.length);
         return (
           <Fragment key={i}>
             <BreadcrumbItem>
-              <BreadcrumbLink href={`/${item.toLowerCase()}`}>
-                {item} /{" "}
+              <BreadcrumbLink
+                href={`/${links
+                  .slice(0, i + 1)
+                  .join("/")
+                  .toLowerCase()}`}
+              >
+                {item}
               </BreadcrumbLink>
             </BreadcrumbItem>
+            {i + 1 !== links?.length && <Text>&nbsp;/&nbsp;</Text>}
           </Fragment>
         );
       })}

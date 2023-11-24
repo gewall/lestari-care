@@ -9,6 +9,8 @@ export default function Dashboard({ children }) {
       w={"full"}
       px={4}
       direction={"column"}
+      h={"100vh"}
+      overflowY={"auto"}
     >
       {children}
     </Flex>

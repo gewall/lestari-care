@@ -29,6 +29,7 @@ import {
 import { useState } from "react";
 import SidebarLink from "./SidebarLink";
 import { useSession } from "next-auth/react";
+import SidebarSubLink from "./SidebarSubLink";
 
 export default function Sidebar() {
   const [isShowed, setIsShowed] = useState(true);
@@ -64,26 +65,26 @@ export default function Sidebar() {
           icon={AiOutlineSolution}
           title={"Pendaftaran Pasien"}
           isShowed={isShowed}
-          href={"/pendaftaran-pasien"}
+          href={"/dashboard/pendaftaran-pasien"}
         />
         <SidebarLink
           icon={AiOutlineFileText}
           title={"Assesment"}
           isShowed={isShowed}
-          href={"/assesment"}
+          href={"/dashboard/assesment"}
         />
         <SidebarLink
           icon={AiOutlineTeam}
           title={"Askep"}
           isShowed={isShowed}
-          href={"/askep"}
+          href={"/dashboard/askep"}
         />
         {session?.user.role === "ADMIN" && (
           <SidebarLink
             icon={AiOutlineException}
             title={"Surat Informasi Concent"}
             isShowed={isShowed}
-            href={"/surat-informasi-concent"}
+            href={"/dashboard/surat-informasi-concent"}
           />
         )}
         {session?.user.role === "ADMIN" && (
@@ -91,21 +92,21 @@ export default function Sidebar() {
             icon={AiOutlineFileSync}
             title={"Surat Rujukan"}
             isShowed={isShowed}
-            href={"/surat-rujukan"}
+            href={"/dashboard/surat-rujukan"}
           />
         )}
         <SidebarLink
           icon={AiOutlineGold}
           title={"Stok"}
           isShowed={isShowed}
-          href={"/stok"}
+          href={"/dashboard/stok"}
         />
         {session?.user.role === "ADMIN" && (
           <SidebarLink
             icon={AiOutlineContainer}
             title={"Insentif Karyawan"}
             isShowed={isShowed}
-            href={"/insentif-karyawan"}
+            href={"/dashboard/insentif-karyawan"}
           />
         )}
         {session?.user.role === "ADMIN" && (
@@ -113,7 +114,7 @@ export default function Sidebar() {
             icon={AiOutlineLineChart}
             title={"Laporan Keuangan"}
             isShowed={isShowed}
-            href={"/laporan-keuangan"}
+            href={"/dashboard/laporan-keuangan"}
           />
         )}
       </VStack>

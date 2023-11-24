@@ -1,8 +1,12 @@
 import { Box, Heading, Text } from "@chakra-ui/react";
 import React from "react";
 import DBreadcrumb from "./DBreadcrumb";
+import { usePathname } from "next/navigation";
 
 const Header = ({ title }) => {
+  const pathname = usePathname();
+
+  // console.log(pathname.split("/").filter((path) => path));
   return (
     <Box mt={{ base: 4, md: 8 }}>
       <Heading
@@ -16,7 +20,7 @@ const Header = ({ title }) => {
         {title}
       </Heading>
       <Box my={2} />
-      <DBreadcrumb links={["Dashboard"]} />
+      <DBreadcrumb links={pathname.split("/").filter((path) => path)} />
     </Box>
   );
 };

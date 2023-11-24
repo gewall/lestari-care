@@ -11,32 +11,6 @@ datasource db {
 }
 
 
-model Account {
-  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?
-  access_token       String?
-  expires_in         DateTime?
-  expires_at         DateTime?
-  token_type         String?
-  scope              String?
-  id_token           String?
-  session_state      String?
-  user               User      @relation(fields: [userId], references: [id])
-
-  @@unique([provider, providerAccountId])
-}
-
-model Session {
-  id           String   @id @default(auto()) @map("_id") @db.ObjectId
-  userId       String
-  expires      DateTime
-  sessionToken String   @unique
-  user         User     @relation(fields: [userId], references: [id])
-}
 
 model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
@@ -45,18 +19,115 @@ model User {
   emailVerified DateTime?
   image         String?
   role          String?
-  accounts      Account[]
-  sessions      Session[]
 }
 
-model VerificationRequest {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+model Pasien {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  nama          String
+  noKtp         Int
+  usia          Int
+  jenisKelamin  String
+  tempatLahir   String
+  tanggalLahir  DateTime?
+  noTelepon     Int
+  assesments    Assesment[]
 }
+
+model Assesment {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  tanggal         DateTime?
+  pasien          Pasien          @relation(fields: [pasienId], references: [id])
+  pasienId        String          @unique @db.ObjectId
+  pengkajianUmum  PengkajianUmum?
+  lokalLuka       LokalLuka?
+  ttv             Ttv?
+  luka            Luka?
+  tujuanPerawatan TujuanPerawatan?
+}
+
+
+model PengkajianUmum {
+  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  riwayatKejadianLuka           String
+  faktorPenyulitPenyembuhan     String
+  statusNutrisi                 String
+  penyakitPenyerta              String
+  tambahanPenyakitPenyerta      String
+  vaskularisasi                 String
+  statusPsikologis              String
+  mobilisasi                    String
+  obatObatan                    String
+  merokok                       String
+  assesment                     Assesment @relation(fields: [assesmentId], references: [id])
+  assesmentId                   String    @unique @db.ObjectId
+}
+
+model LokalLuka {
+  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  tipeLuka                      String
+  tipePenyembuhanLuka           String
+  kunjungan                     Int
+  tanggalKunjungan              DateTime?
+  foto                          String
+  assesment                     Assesment @relation(fields: [assesmentId], references: [id])
+  assesmentId                   String    @unique @db.ObjectId
+}
+
+model Ttv {
+  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  tekananDarah                  String
+  nadi                          String
+  pernafasan                    String
+  suhu                          String
+  gds                           String
+  hasilAbpi                     String
+  assesment                     Assesment @relation(fields: [assesmentId], references: [id])
+  assesmentId                   String    @unique @db.ObjectId
+}
+
+model Luka {
+  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  stadiumLuka                   String
+  ukuranLuka                    String
+  goa                           String
+  exudate                       String
+  pilihExudate                  String
+  warnaDasarLuka                String
+  dasarLuka                     String
+  tepiLuka                      String
+  kulitSekitarLuka              String
+  tandaInfeksi                  String
+  skalaNyeri                    Int?
+  pemeriksaanPenunjang          String
+  assesment                     Assesment @relation(fields: [assesmentId], references: [id])
+  assesmentId                   String    @unique @db.ObjectId
+}
+
+model TujuanPerawatan {
+  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  angkatJaringan                Boolean
+  angkatBendaAsing              Boolean
+  rangsangGranulasi             Boolean
+  percepatProsesInflamasi       Boolean
+  cegahInfeksi                  Boolean
+  angkatBiofilm                 Boolean
+  ciptakanKelembaban            Boolean
+  jagaKelembaban                Boolean
+  serapCairanLuka               Boolean
+  lindungiKulit                 Boolean
+  dukungProsesEpitelisasi       Boolean
+  tipiskanTepiLuka              Boolean
+  kurangiFaktorPenekanan        Boolean
+  kurangiNyeri                  Boolean
+  atasiBau                      Boolean
+  atasiHipergranulasi           Boolean
+  implementasi                  String
+  evaluase                      String
+  rencanaTindakan               String
+  assesment                     Assesment @relation(fields: [assesmentId], references: [id])
+  assesmentId                   String    @unique @db.ObjectId
+}
+
 
 
 enum Role {

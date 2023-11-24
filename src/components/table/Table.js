@@ -7,51 +7,35 @@ import {
   Th,
   Thead,
   Tr,
+  Table as CTable,
 } from "@chakra-ui/react";
 import React, { Fragment } from "react";
 
-const Table = ({ head, data, foot, caption }) => {
+const Table = ({ children, head, foot, caption, size }) => {
   return (
     <TableContainer>
-      <Table variant="simple">
-        <TableCaption>Imperial to metric conversion factors</TableCaption>
+      <CTable variant="simple" size={size}>
+        <TableCaption>{caption}</TableCaption>
         <Thead>
           <Tr>
-            {head.map((item, i) => (
+            {head?.map((item, i) => (
               <Fragment key={i}>
                 <Th>{item}</Th>
               </Fragment>
             ))}
           </Tr>
         </Thead>
-        <Tbody>
-          {data.map((item, i) => (
-            <Tr key={i}>{item}</Tr>
-          ))}
+        <Tbody>{children}</Tbody>
+        {/* <Tfoot>
           <Tr>
-            <Td>inches</Td>
-            <Td>millimetres (mm)</Td>
-            <Td isNumeric>25.4</Td>
+            {foot?.map((item, i) => (
+              <Fragment key={i}>
+                <Th>{item}</Th>
+              </Fragment>
+            ))}
           </Tr>
-          <Tr>
-            <Td>feet</Td>
-            <Td>centimetres (cm)</Td>
-            <Td isNumeric>30.48</Td>
-          </Tr>
-          <Tr>
-            <Td>yards</Td>
-            <Td>metres (m)</Td>
-            <Td isNumeric>0.91444</Td>
-          </Tr>
-        </Tbody>
-        <Tfoot>
-          <Tr>
-            <Th>To convert</Th>
-            <Th>into</Th>
-            <Th isNumeric>multiply by</Th>
-          </Tr>
-        </Tfoot>
-      </Table>
+        </Tfoot> */}
+      </CTable>
     </TableContainer>
   );
 };
