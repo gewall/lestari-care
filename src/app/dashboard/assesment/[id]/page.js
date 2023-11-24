@@ -149,6 +149,16 @@ const Detail = ({ params }) => {
                 value={dataPasien.noTelepon}
               />
             </FormControl>
+
+            <FormControl>
+              <FormLabel>No. RM</FormLabel>
+              <Input
+                isReadOnly
+                type="text"
+                placeholder="Masukkan No.RM Pasien"
+                value={dataPasien.noRM}
+              />
+            </FormControl>
           </SimpleGrid>
         )}
         <Flex my={2}>

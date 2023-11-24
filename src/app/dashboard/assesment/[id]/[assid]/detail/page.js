@@ -151,7 +151,13 @@ const Detail = ({ params }) => {
               <Td>1</Td>
               <Td>Pengkajian Umum</Td>
               <Td>
-                {dataPengkajianUmum === null ? "Belum Diisi" : "Sudah Diisi"}
+                {dataPengkajianUmum === null ? (
+                  <Spinner color="green.300" />
+                ) : dataPengkajianUmum.result === null ? (
+                  "Belum Diisi"
+                ) : (
+                  "Sudah Diisi"
+                )}
               </Td>
               <Td>
                 {dataPengkajianUmum === null ? (
@@ -178,7 +184,16 @@ const Detail = ({ params }) => {
             <Tr>
               <Td>2</Td>
               <Td>Pengkajian Lokal Luka</Td>
-              <Td>{dataLokalLuka === null ? "Belum Diisi" : "Sudah Diisi"}</Td>
+              <Td>
+                {" "}
+                {dataLokalLuka === null ? (
+                  <Spinner color="green.300" />
+                ) : dataLokalLuka.result === null ? (
+                  "Belum Diisi"
+                ) : (
+                  "Sudah Diisi"
+                )}
+              </Td>
               <Td>
                 {dataLokalLuka === null ? (
                   <Button
@@ -204,7 +219,16 @@ const Detail = ({ params }) => {
             <Tr>
               <Td>3</Td>
               <Td>TTV</Td>
-              <Td>{dataTTV === null ? "Belum Diisi" : "Sudah Diisi"}</Td>
+              <Td>
+                {" "}
+                {dataTTV === null ? (
+                  <Spinner color="green.300" />
+                ) : dataTTV.result === null ? (
+                  "Belum Diisi"
+                ) : (
+                  "Sudah Diisi"
+                )}
+              </Td>
               <Td>
                 {dataTTV === null ? (
                   <Button
@@ -230,7 +254,16 @@ const Detail = ({ params }) => {
             <Tr>
               <Td>4</Td>
               <Td>Luka</Td>
-              <Td>{dataLuka === null ? "Belum Diisi" : "Sudah Diisi"}</Td>
+              <Td>
+                {" "}
+                {dataLuka === null ? (
+                  <Spinner color="green.300" />
+                ) : dataLuka.result === null ? (
+                  "Belum Diisi"
+                ) : (
+                  "Sudah Diisi"
+                )}
+              </Td>
               <Td>
                 {dataLuka === null ? (
                   <Button
@@ -257,7 +290,13 @@ const Detail = ({ params }) => {
               <Td>5</Td>
               <Td>Tujuan Perawatan</Td>
               <Td>
-                {dataTujuanPerawatan === null ? "Belum Diisi" : "Sudah Diisi"}
+                {dataTujuanPerawatan === null ? (
+                  <Spinner color="green.300" />
+                ) : dataTujuanPerawatan.result === null ? (
+                  "Belum Diisi"
+                ) : (
+                  "Sudah Diisi"
+                )}
               </Td>
               <Td>
                 {dataTujuanPerawatan === null ? (

@@ -7,10 +7,13 @@ import ContentWrapper from "@/components/dashboard/ContentWrapper";
 import {
   Box,
   Button,
+  Flex,
   HStack,
   Heading,
   IconButton,
   Input,
+  Spacer,
+  Spinner,
   Td,
   Tr,
   VStack,
@@ -62,9 +65,13 @@ const Assesment = () => {
       <Header title={"Assesment"} />
 
       <ContentWrapper>
-        <Heading as={"h5"} size={"md"}>
-          Pilih Pasien
-        </Heading>
+        <Flex>
+          <Heading as={"h5"} size={"md"}>
+            Pilih Pasien
+          </Heading>
+          <Spacer />
+          {data === null && <Spinner color="green.300" />}
+        </Flex>
         <HStack my={2} w={44} as={"form"} onSubmit={handleSubmit(onSearch)}>
           <Input placeholder="Cari Pasien..." {...register("search")} />
           <IconButton

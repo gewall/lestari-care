@@ -159,9 +159,9 @@ const PendaftaranPasien = () => {
             </FormControl>
 
             <FormControl>
-              <FormLabel>No.RM</FormLabel>
+              <FormLabel>No. RM</FormLabel>
               <Input
-                type="number"
+                type="text"
                 placeholder="Masukkan No.RM Pasien"
                 {...register("noRM", { required: true })}
               />
