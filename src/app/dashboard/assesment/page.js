@@ -74,12 +74,21 @@ const Assesment = () => {
           />
         </HStack>
         <Table
-          head={["No", "Nama", "Usia", "Jenis Kelamin", "No.Telp", "Aksi"]}
+          head={[
+            "No",
+            "Nama",
+            "No.RM",
+            "Usia",
+            "Jenis Kelamin",
+            "No.Telp",
+            "Aksi",
+          ]}
         >
           {data?.map((item, i) => (
             <Tr key={item.id}>
               <Td>{i + 1}</Td>
               <Td>{item.nama}</Td>
+              <Td>{item.noRM}</Td>
               <Td>{item.usia}</Td>
               <Td>{item.jenisKelamin}</Td>
               <Td>{item.noTelepon}</Td>

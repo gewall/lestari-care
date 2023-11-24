@@ -82,87 +82,95 @@ const PendaftaranPasien = () => {
         borderTopWidth={"4px"}
         w={"100%"}
       >
-        <SimpleGrid
-          columns={{ base: 1, md: 2 }}
-          spacing={4}
-          as={"form"}
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <FormControl>
-            <FormLabel>Nama</FormLabel>
-            <Input
-              type="text"
-              placeholder="Masukkan Nama Pasien"
-              {...register("nama", { required: true })}
-            />
-            {errors.nama && (
-              <FormErrorMessage>Mohon Masukkan Nama</FormErrorMessage>
-            )}
-          </FormControl>
+        <Box as={"form"} onSubmit={handleSubmit(onSubmit)}>
+          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
+            <FormControl>
+              <FormLabel>Nama</FormLabel>
+              <Input
+                type="text"
+                placeholder="Masukkan Nama Pasien"
+                {...register("nama", { required: true })}
+              />
+              {errors.nama && (
+                <FormErrorMessage>Mohon Masukkan Nama</FormErrorMessage>
+              )}
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>No. Ktp</FormLabel>
-            <Input
-              type="number"
-              placeholder="Masukkan No.Ktp Pasien"
-              {...register("noKtp", { required: true })}
-            />
-            {errors.noKtp && (
-              <FormErrorMessage>Mohon Masukkan No.Ktp</FormErrorMessage>
-            )}
-          </FormControl>
+            <FormControl>
+              <FormLabel>No. Ktp</FormLabel>
+              <Input
+                type="number"
+                placeholder="Masukkan No.Ktp Pasien"
+                {...register("noKtp", { required: true })}
+              />
+              {errors.noKtp && (
+                <FormErrorMessage>Mohon Masukkan No.Ktp</FormErrorMessage>
+              )}
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Usia</FormLabel>
-            <Input
-              type="number"
-              placeHolder={"Masukkan Usia Pasien"}
-              {...register("usia", { required: true })}
-            />
-            {errors.usia && (
-              <FormErrorMessage>Mohon Masukkan Usia</FormErrorMessage>
-            )}
-          </FormControl>
+            <FormControl>
+              <FormLabel>Usia</FormLabel>
+              <Input
+                type="number"
+                placeHolder={"Masukkan Usia Pasien"}
+                {...register("usia", { required: true })}
+              />
+              {errors.usia && (
+                <FormErrorMessage>Mohon Masukkan Usia</FormErrorMessage>
+              )}
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Jenis Kelamin</FormLabel>
-            <Select
-              defaultValue={"L"}
-              {...register("jenisKelamin", { required: true })}
-            >
-              <option value={"L"}>Laki - Laki</option>
-              <option value={"P"}>Perempuan</option>
-            </Select>
-          </FormControl>
+            <FormControl>
+              <FormLabel>Jenis Kelamin</FormLabel>
+              <Select
+                defaultValue={"L"}
+                {...register("jenisKelamin", { required: true })}
+              >
+                <option value={"L"}>Laki - Laki</option>
+                <option value={"P"}>Perempuan</option>
+              </Select>
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Tempat, Tanggal Lahir</FormLabel>
-            <Input
-              type="text"
-              placeholder="Masukkan Tempat Lahir Pasien"
-              {...register("tempatLahir", { required: true })}
-            />
-            <Box my={2} />
-            <SingleDatepicker
-              name="tanggal-lahir"
-              date={date}
-              onDateChange={setDate}
-            />
-          </FormControl>
+            <FormControl>
+              <FormLabel>Tempat, Tanggal Lahir</FormLabel>
+              <Input
+                type="text"
+                placeholder="Masukkan Tempat Lahir Pasien"
+                {...register("tempatLahir", { required: true })}
+              />
+              <Box my={2} />
+              <SingleDatepicker
+                name="tanggal-lahir"
+                date={date}
+                onDateChange={setDate}
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>No. Telepon</FormLabel>
-            <Input
-              type="number"
-              placeholder="Masukkan No.Telepon Pasien"
-              {...register("noTelepon", { required: true })}
-            />
-            {errors.noTelepon && (
-              <FormErrorMessage>Mohon Masukkan No.Telepon</FormErrorMessage>
-            )}
-          </FormControl>
+            <FormControl>
+              <FormLabel>No. Telepon</FormLabel>
+              <Input
+                type="number"
+                placeholder="Masukkan No.Telepon Pasien"
+                {...register("noTelepon", { required: true })}
+              />
+              {errors.noTelepon && (
+                <FormErrorMessage>Mohon Masukkan No.Telepon</FormErrorMessage>
+              )}
+            </FormControl>
 
-          <ButtonGroup>
+            <FormControl>
+              <FormLabel>No.RM</FormLabel>
+              <Input
+                type="number"
+                placeholder="Masukkan No.RM Pasien"
+                {...register("noRM", { required: true })}
+              />
+              {errors.noTelepon && (
+                <FormErrorMessage>Mohon Masukkan No.RM</FormErrorMessage>
+              )}
+            </FormControl>
+          </SimpleGrid>
+          <ButtonGroup my={4}>
             <Button type="reset" colorScheme={"red"}>
               Reset
             </Button>
@@ -170,7 +178,7 @@ const PendaftaranPasien = () => {
               Simpan
             </Button>
           </ButtonGroup>
-        </SimpleGrid>
+        </Box>
       </Box>
     </DashboardLayout>
   );

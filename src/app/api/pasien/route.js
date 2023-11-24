@@ -11,7 +11,14 @@ export async function GET(req) {
       skip,
       take: 5,
       where: {
-        nama: search,
+        OR: [
+          {
+            nama: search,
+          },
+          {
+            noRM: search,
+          },
+        ],
       },
     });
   } else {

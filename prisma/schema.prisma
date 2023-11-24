@@ -30,6 +30,7 @@ model Pasien {
   tempatLahir   String
   tanggalLahir  DateTime?
   noTelepon     Int
+  noRM          String?   @unique
   assesments    Assesment[]
 }
 
