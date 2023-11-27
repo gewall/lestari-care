@@ -23,7 +23,9 @@ import {
   AiOutlineGold,
   AiOutlineLineChart,
   AiOutlineRight,
+  AiOutlineSafetyCertificate,
   AiOutlineSolution,
+  AiOutlineSync,
   AiOutlineTeam,
 } from "react-icons/ai";
 import { useState } from "react";
@@ -69,16 +71,16 @@ export default function Sidebar() {
         />
         <SidebarLink
           icon={AiOutlineFileText}
-          title={"Assesment"}
+          title={"Assesment Dan Askep"}
           isShowed={isShowed}
           href={"/dashboard/assesment"}
         />
-        <SidebarLink
+        {/* <SidebarLink
           icon={AiOutlineTeam}
           title={"Askep"}
           isShowed={isShowed}
           href={"/dashboard/askep"}
-        />
+        /> */}
         {session?.user.role === "ADMIN" && (
           <SidebarLink
             icon={AiOutlineException}
@@ -95,18 +97,35 @@ export default function Sidebar() {
             href={"/dashboard/surat-rujukan"}
           />
         )}
-        <SidebarLink
+        {/* <SidebarLink
           icon={AiOutlineGold}
           title={"Stok"}
           isShowed={isShowed}
           href={"/dashboard/stok"}
+        /> */}
+        <SidebarSubLink
+          icon={AiOutlineGold}
+          title={"Stok"}
+          isShowed={isShowed}
+          subMenus={[
+            { title: "BHP", icon: AiOutlineSync, href: "/dashboard/stok/bhp" },
+            { title: "Alkes", icon: AiOutlineSafetyCertificate, href: "#" },
+          ]}
         />
+        {session?.user.role === "KARYAWAN" && (
+          <SidebarLink
+            icon={AiOutlineContainer}
+            title={"Absensi Karyawan"}
+            isShowed={isShowed}
+            href={"/dashboard/karyawan/absensi"}
+          />
+        )}
         {session?.user.role === "ADMIN" && (
           <SidebarLink
             icon={AiOutlineContainer}
             title={"Insentif Karyawan"}
             isShowed={isShowed}
-            href={"/dashboard/insentif-karyawan"}
+            href={"/dashboard/karyawan/insentif"}
           />
         )}
         {session?.user.role === "ADMIN" && (

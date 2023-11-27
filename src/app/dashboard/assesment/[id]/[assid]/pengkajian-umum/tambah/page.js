@@ -64,26 +64,26 @@ const TambahPengkajianUmum = ({ params }) => {
           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4} mx={2} my={4}>
             <FormControl>
               <FormLabel>
-                Riwayat kejadian luka dan perawatan sebelumnya
+                Riwayat Kejadian Luka dan Perawatan Sebelumnya
               </FormLabel>
               <Input
                 type="text"
-                placeholder="Masukkan riwayat Kejadian Luka"
+                placeholder="Masukkan Riwayat Kejadian Luka"
                 {...register("riwayatKejadianLuka", { required: true })}
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Faktor penyulit penyembuhan luka</FormLabel>
+              <FormLabel>Faktor Penyulit Penyembuhan Luka</FormLabel>
               <Input
                 type="text"
-                placeholder="Masukkan faktor penyulit penyembuhan"
+                placeholder="Masukkan Faktor Penyulit Penyembuhan"
                 {...register("faktorPenyulitPenyembuhan", {
                   required: true,
                 })}
               />
             </FormControl>
             <FormControl>
-              <FormLabel>Status nutrisi</FormLabel>
+              <FormLabel>Status Nutrisi</FormLabel>
               <Select
                 defaultValue={"Baik"}
                 {...register("statusNutrisi", { required: true })}
@@ -93,7 +93,7 @@ const TambahPengkajianUmum = ({ params }) => {
               </Select>
             </FormControl>
             <FormControl>
-              <FormLabel>Penyakit penyerta</FormLabel>
+              <FormLabel>Penyakit Penyerta</FormLabel>
               <Select
                 defaultValue={"DM"}
                 {...register("penyakitPenyerta", { required: true })}
@@ -144,7 +144,7 @@ const TambahPengkajianUmum = ({ params }) => {
               </Select>
             </FormControl>
             <FormControl>
-              <FormLabel>Obat - obatan yang digunakan</FormLabel>
+              <FormLabel>Obat - Obatan yang Digunakan</FormLabel>
               <Input
                 type="text"
                 placeholder="Masukkan obat - obatan yang digunakan"

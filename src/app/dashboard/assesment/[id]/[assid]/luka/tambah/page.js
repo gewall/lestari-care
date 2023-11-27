@@ -7,7 +7,7 @@ import { createLuka } from "@/lib/api/setDataAssesment";
 import {
   Box,
   Button,
-  Center,
+
   Flex,
   FormControl,
   FormLabel,
@@ -43,7 +43,7 @@ const TambahLuka = ({ params }) => {
         duration: 9000,
         isClosable: true,
       });
-      router.push(`/dashboard/assesment/${params.id}/${params.assid}/detail`)
+      router.push(`/dashboard/assesment/${params.id}/${params.assid}/detail`);
     } else {
       toast({
         title: "Gagal Menyimpan Data.",
@@ -55,6 +55,7 @@ const TambahLuka = ({ params }) => {
     }
     setLoading(false);
   };
+  
 
   return (
     <DashboardLayout>
@@ -196,10 +197,29 @@ const TambahLuka = ({ params }) => {
             </FormControl>
             <FormControl>
               <FormLabel>Pemeriksaan Penunjang</FormLabel>
+              <Select
+                defaultValue={"Ada"}
+                {...register("pemeriksaanPenunjang", {
+                  required: true,
+                })}
+              >
+                <option value={"Lab"}>Lab</option>
+                <option value={"CT Angio"}>CT Angio</option>
+                <option value={"USG Vaskular"}>USG Vaskular</option>
+                <option value={"Rontgen"}>Rontgen</option>
+                <option value={"Lainnya"}>Lainnya</option>
+              </Select>
+              <Box my={2} />
               <Input
                 type="text"
-                placeholder="Masukkan Pemeriksaan Penunjang"
-                {...register("pemeriksaanPenunjang", { required: true })}
+                placeholder="Masukkan Tambahan"
+                {...register("pemeriksaanPenunjangTambahan", { required: true })}
+              />
+              <Box my={2} />
+              <Input
+                type="file"
+                placeholder="Masukkan Foto"
+                {...register("foto", { required: true })}
               />
             </FormControl>
           </SimpleGrid>

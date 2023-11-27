@@ -9,6 +9,8 @@ export async function POST(req, res) {
     data,
   });
 
+  console.log(result);
+
   if (result) {
     return Response.json(result);
   } else {

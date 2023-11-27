@@ -62,7 +62,8 @@ export const createVVT = async ({ val, params }) => {
 };
 
 export const createLuka = async ({ val, params }) => {
-  const data = { ...val, assesmentId: params.assid };
+  const imgStr = await toBase64(val.foto[0]);
+  const data = { ...val, assesmentId: params.assid,foto: imgStr };
 
   const req = await fetch("/api/assesment/luka/tambah", {
     method: "POST",

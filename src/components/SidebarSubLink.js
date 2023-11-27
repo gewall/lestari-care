@@ -52,7 +52,12 @@ const SidebarSubLink = ({ isShowed, title, icon, subMenus }) => {
       <Collapse
         in={isExpanded}
         animateOpacity
-        style={{ width: "100%", flexWrap: "nowrap", display: "flex" }}
+        style={{
+          width: "100%",
+          flexWrap: "nowrap",
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
         {subMenus.map((item, i) => (
           <Link

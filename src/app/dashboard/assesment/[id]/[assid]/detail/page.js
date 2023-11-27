@@ -25,10 +25,15 @@ import {
   Td,
   Text,
   Tr,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
+import { useForm } from "react-hook-form";
 
 const Detail = ({ params }) => {
+  const toast = useToast();
+  const { data: session } = useSession();
   const [dataPengkajianUmum, setDataPengkajianUmum] = useState(null);
   const [dataLokalLuka, setDataLokalLuka] = useState(null);
   const [dataTTV, setDataTTV] = useState(null);
@@ -36,42 +41,85 @@ const Detail = ({ params }) => {
   const [dataTujuanPerawatan, setDataTujuanPerawatan] = useState(null);
   const [dataPasien, setDataPasien] = useState(null);
   const [dataAssesment, setDataAssesment] = useState(null);
+  const [loadingBiaya, setLoadingBiaya] = useState(false);
+  const [isLunas, setIsLunas] = useState({ status: false, biaya: 0 });
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
+  const onSubmit = async (e) => {
+    setLoadingBiaya(true);
+    const req = await fetch(`/api/assesment/bayar/tambah`, {
+      method: "POST",
+      body: JSON.stringify({
+        assesmentId: params.assid,
+        biaya: e.biaya,
+      }),
+    });
+    const res = await req.json();
+    console.log(res);
+    if (req.ok) {
+      toast({
+        title: "Pembayaran Berhasil.",
+        description: "Pembayaran Berhasil Disimpan.",
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+
+      if (res?.result !== null)
+        setIsLunas({ status: true, biaya: res.result.biaya });
+    } else {
+      toast({
+        title: "Pembayaran Gagal.",
+        description: "Pembayaran Gagal Disimpan.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+    setLoadingBiaya(false);
+  };
   useEffect(() => {
+    const getKeuangan = async () => {
+      const req = await fetch(`/api/assesment/bayar/${params.assid}`);
+      const res = await req.json();
+
+      if (req.ok) {
+        if (res?.result !== null)
+          setIsLunas({ status: true, biaya: res.result.biaya });
+      }
+    };
+
     const getDataPengkajianUmum = async () => {
       const req = await fetch(`/api/assesment/pengkajian-umum/${params.assid}`);
       const res = await req.json();
 
-      if (req.ok) {
-        setDataPengkajianUmum(res.result);
-      }
+      setDataPengkajianUmum(res);
     };
 
     const getDataLokalLuka = async () => {
       const req = await fetch(`/api/assesment/lokal-luka/${params.assid}`);
       const res = await req.json();
 
-      if (req.ok) {
-        setDataLokalLuka(res.result);
-      }
+      setDataLokalLuka(res);
     };
 
     const getDataTTV = async () => {
       const req = await fetch(`/api/assesment/ttv/${params.assid}`);
       const res = await req.json();
 
-      if (req.ok) {
-        setDataTTV(res.result);
-      }
+      setDataTTV(res);
     };
 
     const getDataLuka = async () => {
       const req = await fetch(`/api/assesment/luka/${params.assid}`);
       const res = await req.json();
 
-      if (req.ok) {
-        setDataLuka(res.result);
-      }
+      setDataLuka(res);
     };
 
     const getDataTujuanPerawatan = async () => {
@@ -80,9 +128,7 @@ const Detail = ({ params }) => {
       );
       const res = await req.json();
 
-      if (req.ok) {
-        setDataTujuanPerawatan(res.result);
-      }
+      setDataTujuanPerawatan(res);
     };
 
     const getPasien = async () => {
@@ -104,9 +150,9 @@ const Detail = ({ params }) => {
     getDataTTV();
     getDataLuka();
     getDataTujuanPerawatan();
+    getKeuangan();
   }, [params.assid]);
 
-  console.log(dataPengkajianUmum);
   return (
     <DashboardLayout>
       <Header title={"Detail"} />
@@ -142,6 +188,39 @@ const Detail = ({ params }) => {
                   isReadOnly
                 />
               </FormControl>
+              {session?.user.role === "ADMIN" && (
+                <FormControl as={"form"} onSubmit={handleSubmit(onSubmit)}>
+                  <FormLabel>Biaya</FormLabel>
+                  {isLunas.status ? (
+                    <Input
+                      type="string"
+                      value={
+                        new Intl.NumberFormat("id-ID", {
+                          style: "currency",
+                          currency: "IDR",
+                        }).format(isLunas.biaya) + " (LUNAS)"
+                      }
+                      isReadOnly
+                    />
+                  ) : (
+                    <Input
+                      type="number"
+                      placeholder="Masukkan Biaya"
+                      {...register("biaya", { required: true })}
+                    />
+                  )}
+                  {!isLunas.status && (
+                    <Button
+                      type={"submit"}
+                      colorScheme={"whatsapp"}
+                      mt={2}
+                      isLoading={loadingBiaya}
+                    >
+                      Bayar
+                    </Button>
+                  )}
+                </FormControl>
+              )}
             </SimpleGrid>
           )}
         </Box>
@@ -160,7 +239,7 @@ const Detail = ({ params }) => {
                 )}
               </Td>
               <Td>
-                {dataPengkajianUmum === null ? (
+                {dataPengkajianUmum?.result === null ? (
                   <Button
                     colorScheme={"twitter"}
                     size={"sm"}
@@ -174,7 +253,7 @@ const Detail = ({ params }) => {
                     colorScheme={"whatsapp"}
                     size={"sm"}
                     as={Link}
-                    href={""}
+                    href={`/dashboard/assesment/${params.id}/${params.assid}/pengkajian-umum/${dataLokalLuka?.result?.id}`}
                   >
                     Lihat
                   </Button>
@@ -195,7 +274,7 @@ const Detail = ({ params }) => {
                 )}
               </Td>
               <Td>
-                {dataLokalLuka === null ? (
+                {dataLokalLuka?.result === null ? (
                   <Button
                     colorScheme={"twitter"}
                     size={"sm"}
@@ -209,7 +288,7 @@ const Detail = ({ params }) => {
                     colorScheme={"whatsapp"}
                     size={"sm"}
                     as={Link}
-                    href={""}
+                    href={`/dashboard/assesment/${params.id}/${params.assid}/lokal-luka/${dataLokalLuka?.result?.id}`}
                   >
                     Lihat
                   </Button>
@@ -230,7 +309,7 @@ const Detail = ({ params }) => {
                 )}
               </Td>
               <Td>
-                {dataTTV === null ? (
+                {dataTTV?.result === null ? (
                   <Button
                     colorScheme={"twitter"}
                     size={"sm"}
@@ -244,7 +323,7 @@ const Detail = ({ params }) => {
                     colorScheme={"whatsapp"}
                     size={"sm"}
                     as={Link}
-                    href={""}
+                    href={`/dashboard/assesment/${params.id}/${params.assid}/ttv/${dataLokalLuka?.result?.id}`}
                   >
                     Lihat
                   </Button>
@@ -265,7 +344,7 @@ const Detail = ({ params }) => {
                 )}
               </Td>
               <Td>
-                {dataLuka === null ? (
+                {dataLuka?.result === null ? (
                   <Button
                     colorScheme={"twitter"}
                     size={"sm"}
@@ -279,7 +358,7 @@ const Detail = ({ params }) => {
                     colorScheme={"whatsapp"}
                     size={"sm"}
                     as={Link}
-                    href={""}
+                    href={`/dashboard/assesment/${params.id}/${params.assid}/luka/${dataLokalLuka?.result?.id}`}
                   >
                     Lihat
                   </Button>
@@ -299,7 +378,7 @@ const Detail = ({ params }) => {
                 )}
               </Td>
               <Td>
-                {dataTujuanPerawatan === null ? (
+                {dataTujuanPerawatan?.result === null ? (
                   <Button
                     colorScheme={"twitter"}
                     size={"sm"}
@@ -313,7 +392,7 @@ const Detail = ({ params }) => {
                     colorScheme={"whatsapp"}
                     size={"sm"}
                     as={Link}
-                    href={""}
+                    href={`/dashboard/assesment/${params.id}/${params.assid}/tujuan-perawatan/${dataLokalLuka?.result?.id}`}
                   >
                     Lihat
                   </Button>

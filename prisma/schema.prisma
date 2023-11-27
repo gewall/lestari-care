@@ -16,9 +16,9 @@ model User {
   id            String    @id @default(auto()) @map("_id") @db.ObjectId
   name          String?
   email         String?   @unique
-  emailVerified DateTime?
-  image         String?
   role          String?
+  password      String?
+  absensi       Absensi[]
 }
 
 model Pasien {
@@ -35,15 +35,16 @@ model Pasien {
 }
 
 model Assesment {
-  id              String          @id @default(auto()) @map("_id") @db.ObjectId
-  tanggal         DateTime?
-  pasien          Pasien          @relation(fields: [pasienId], references: [id])
-  pasienId        String          @unique @db.ObjectId
-  pengkajianUmum  PengkajianUmum?
-  lokalLuka       LokalLuka?
-  ttv             Ttv?
-  luka            Luka?
-  tujuanPerawatan TujuanPerawatan?
+  id                    String          @id @default(auto()) @map("_id") @db.ObjectId
+  tanggal               DateTime?
+  pasien                Pasien          @relation(fields: [pasienId], references: [id])
+  pasienId              String          @db.ObjectId
+  pengkajianUmum        PengkajianUmum?
+  lokalLuka             LokalLuka?
+  ttv                   Ttv?
+  luka                  Luka?
+  tujuanPerawatan       TujuanPerawatan?
+  keuanganAssesment     KeuanganAssesment?
 }
 
 
@@ -100,6 +101,8 @@ model Luka {
   tandaInfeksi                  String
   skalaNyeri                    Int?
   pemeriksaanPenunjang          String
+  pemeriksaanPenunjangTambahan  String
+  foto                          String
   assesment                     Assesment @relation(fields: [assesmentId], references: [id])
   assesmentId                   String    @unique @db.ObjectId
 }
@@ -129,6 +132,29 @@ model TujuanPerawatan {
   assesmentId                   String    @unique @db.ObjectId
 }
 
+model KeuanganAssesment {
+  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  biaya                         Int
+  tanggalBayar                  DateTime
+  assesment                     Assesment @relation(fields: [assesmentId], references: [id])
+  assesmentId                   String    @unique @db.ObjectId
+}
+
+model BHP {
+  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  nama          String
+  jumlahStok    Int
+  ukuran        Int
+  harga         Int
+}
+
+model Absensi {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  tanggal       DateTime?
+  foto          String
+  user          User          @relation(fields: [userId], references: [id])
+  userId        String        @db.ObjectId
+}
 
 
 enum Role {
