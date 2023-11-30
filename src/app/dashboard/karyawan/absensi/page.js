@@ -4,6 +4,8 @@ import React, { useEffect, useState } from "react";
 import DashboardLayout from "@/layouts/dashboard";
 import Header from "@/components/dashboard/Header";
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   ButtonGroup,
@@ -57,7 +59,7 @@ const Absensi = () => {
     if (res.result !== null) {
       toast({
         title: "Berhasil Menambah Data.",
-        description: "Data Pasien Berhasil Ditambahkan.",
+        description: "Data Absen Berhasil Ditambahkan.",
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -66,7 +68,7 @@ const Absensi = () => {
     } else {
       toast({
         title: "Gagal Menambah Data.",
-        description: "Data Pasien Gagal Ditambahakan.",
+        description: "Data Absen Gagal Ditambahakan.",
         status: "error",
         duration: 9000,
         isClosable: true,
@@ -97,14 +99,24 @@ const Absensi = () => {
 
       <ContentWrapper>
         {isAbsented ? (
-          <Heading as={"h4"} size={"md"}>
+          <Alert status="success">
+            <AlertIcon />
             Sudah Melakukan Absensi
-          </Heading>
+          </Alert>
         ) : (
           <Box as={"form"} onSubmit={handleSubmit(onSubmit)}>
             <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
               <FormControl>
                 <FormLabel>Nama</FormLabel>
+                <Input
+                  type="text"
+                  value={session?.user?.name}
+                  // placeholder="Masukkan Nama Pasien"
+                  // {...register("nama", { required: true })}
+                />
+              </FormControl>
+              <FormControl>
+                <FormLabel>Email</FormLabel>
                 <Input
                   type="text"
                   value={session?.user?.email}

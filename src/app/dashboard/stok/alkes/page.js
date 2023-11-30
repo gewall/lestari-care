@@ -39,7 +39,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Link } from "@chakra-ui/next-js";
 
-const StokBHP = () => {
+const StokAlkes = () => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -87,7 +87,7 @@ const StokBHP = () => {
   const onStockSubmit = async (e) => {
     setLoading(true);
 
-    const req = await fetch("/api/stok/bhp/tambah", {
+    const req = await fetch("/api/stok/alkes/tambah", {
       method: "POST",
       body: JSON.stringify(e),
     });
@@ -102,6 +102,7 @@ const StokBHP = () => {
         duration: 9000,
         isClosable: true,
       });
+      perbaruiData();
     } else {
       toast({
         title: "Gagal Menyimpan Data.",
@@ -117,7 +118,7 @@ const StokBHP = () => {
 
   useEffect(() => {
     const getData = async () => {
-      const req = await fetch("/api/stok/bhp");
+      const req = await fetch("/api/stok/alkes");
       const res = await req.json();
 
       if (!req.ok) {
@@ -131,7 +132,7 @@ const StokBHP = () => {
   }, []);
 
   const onSearch = async (e) => {
-    const req = await fetch(`/api/stok/bhp?search=${e.search}`);
+    const req = await fetch(`/api/stok/alkes?search=${e.search}`);
     const res = await req.json();
 
     if (!req.ok) {
@@ -154,14 +155,14 @@ const StokBHP = () => {
   const onAmbilBarang = async (e) => {
     setLoadingAmbilStock(true);
     const data = { ...e, id: idAmbil };
-    const req = await fetch("/api/stok/bhp/ambil", {
+    const req = await fetch("/api/stok/alkes/ambil", {
       method: "PUT",
       body: JSON.stringify(data),
     });
 
     const res = await req.json();
 
-    if (req.ok) {
+    if (!res.error) {
       toast({
         title: "Berhasil Mengubah Data.",
         description: `Data Stok Berhasil Diubah,Barang ${
@@ -179,7 +180,7 @@ const StokBHP = () => {
       toast({
         title: "Gagal Mengubah Data.",
         description: "Data Stok Gagal Diubah.",
-        status: "success",
+        status: "error",
         duration: 9000,
         isClosable: true,
       });
@@ -190,7 +191,7 @@ const StokBHP = () => {
   const onTambahBarang = async (e) => {
     setLoadingTambahStock(true);
     const data = { ...e, id: idAmbil };
-    const req = await fetch("/api/stok/bhp/tambah-stok", {
+    const req = await fetch("/api/stok/alkes/tambah-stok", {
       method: "PUT",
       body: JSON.stringify(data),
     });
@@ -210,7 +211,7 @@ const StokBHP = () => {
       toast({
         title: "Gagal Mengubah Data.",
         description: "Data Stok Gagal Diubah.",
-        status: "success",
+        status: "error",
         duration: 9000,
         isClosable: true,
       });
@@ -219,7 +220,7 @@ const StokBHP = () => {
   };
 
   const perbaruiData = async () => {
-    const req = await fetch("/api/stok/bhp");
+    const req = await fetch("/api/stok/alkes");
     const res = await req.json();
 
     if (!req.ok) {
@@ -231,7 +232,7 @@ const StokBHP = () => {
 
   return (
     <DashboardLayout>
-      <Header title={"Stok BHP"} />
+      <Header title={"Stok Alkes"} />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
@@ -391,7 +392,7 @@ const StokBHP = () => {
               </Td>
 
               <Td>
-                {/* <Link href={`/dashboard/stok/bhp/${item.id}`}>Detail</Link> */}
+                {/* <Link href={`/dashboard/stok/alkes/${item.id}`}>Detail</Link> */}
                 <ButtonGroup>
                   <Button
                     size={"sm"}
@@ -417,4 +418,4 @@ const StokBHP = () => {
   );
 };
 
-export default StokBHP;
+export default StokAlkes;

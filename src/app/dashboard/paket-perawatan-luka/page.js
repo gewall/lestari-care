@@ -22,6 +22,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   SimpleGrid,
   Spacer,
   Spinner,
@@ -37,7 +38,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Link } from "@chakra-ui/next-js";
 
-const Insentif = () => {
+const PaketPerawatanLuka = () => {
   const toast = useToast();
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -49,17 +50,17 @@ const Insentif = () => {
     formState: { errors },
   } = useForm();
   const {
-    register: registerKaryawan,
-    handleSubmit: handleSubmitKaryawan,
+    register: registerPasien,
+    handleSubmit: handleSubmitPasien,
 
-    formState: { errors: errorsKaryawan },
+    formState: { errors: errorsPasien },
   } = useForm();
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
     const getData = async () => {
-      const req = await fetch("/api/karyawan");
+      const req = await fetch("/api/pasien-perawatan");
       const res = await req.json();
 
       if (!req.ok) {
@@ -73,7 +74,7 @@ const Insentif = () => {
   }, []);
 
   const onSearch = async (e) => {
-    const req = await fetch(`/api/pasien?search=${e.search}`);
+    const req = await fetch(`/api/pasien-perawatan?search=${e.search}`);
     const res = await req.json();
 
     if (!req.ok) {
@@ -85,7 +86,7 @@ const Insentif = () => {
 
   const onSubmit = async (e) => {
     setLoadingTambah(true);
-    const req = await fetch("/api/karyawan/tambah", {
+    const req = await fetch("/api/pasien-perawatan/tambah", {
       method: "POST",
       body: JSON.stringify(e),
     });
@@ -95,15 +96,16 @@ const Insentif = () => {
     if (res?.result !== null) {
       toast({
         title: "Berhasil Menambah Data.",
-        description: "Data Karyawan Berhasil Ditambahkan.",
+        description: "Data Pasien Berhasil Ditambahkan.",
         status: "success",
         duration: 9000,
         isClosable: true,
       });
+      refreshData();
     } else {
       toast({
         title: "Gagal Menambah Data.",
-        description: "Data Karyawan Gagal Ditambahkan.",
+        description: "Data Pasien Gagal Ditambahkan.",
         status: "success",
         duration: 9000,
         isClosable: true,
@@ -113,15 +115,26 @@ const Insentif = () => {
     setLoadingTambah(false);
   };
 
+  const refreshData = async () => {
+    const req = await fetch("/api/pasien-perawatan");
+    const res = await req.json();
+
+    if (!req.ok) {
+      return;
+    }
+
+    setData(res);
+  };
+
   console.log(data);
   return (
     <DashboardLayout>
-      <Header title={"Insentif"} />
+      <Header title={"Paket Perawatan Luka"} />
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent as={"form"} onSubmit={handleSubmitKaryawan(onSubmit)}>
-          <ModalHeader>Tambah Karyawan</ModalHeader>
+        <ModalContent as={"form"} onSubmit={handleSubmitPasien(onSubmit)}>
+          <ModalHeader>Tambah Pasien</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <SimpleGrid columns={{ base: 1, md: 1 }} spacing={4} mx={2} my={4}>
@@ -129,33 +142,23 @@ const Insentif = () => {
                 <FormLabel>Nama</FormLabel>
                 <Input
                   type="text"
-                  placeholder="Masukkan Nama Karyawan"
-                  {...registerKaryawan("name", { required: true })}
+                  placeholder="Masukkan Nama Pasien"
+                  {...registerPasien("nama", { required: true })}
                 />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
               </FormControl>
               <FormControl>
-                <FormLabel>Email</FormLabel>
-                <Input
-                  type="email"
-                  placeholder="Masukkan Email Karyawan"
-                  {...registerKaryawan("email", { required: true })}
-                />
+                <FormLabel>Paket</FormLabel>
+                <Select
+                  type="paket"
+                  placeholder="Masukkan Pilihan Paket"
+                  {...registerPasien("paket", { required: true })}
+                >
+                  <option value={"Basic"}>Basic</option>
+                  <option value={"Silver"}>Silver</option>
+                  <option value={"Gold"}>Gold</option>
+                </Select>
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
-              </FormControl>
-              <FormControl isInvalid={errorsKaryawan?.password}>
-                <FormLabel>Password</FormLabel>
-                <Input
-                  type="text"
-                  placeholder="Masukkan Password Karyawan"
-                  {...registerKaryawan("password", {
-                    required: true,
-                    minLength: 6,
-                  })}
-                />
-                {errorsKaryawan?.password && (
-                  <FormErrorMessage>Masukkan Minimal 6 Huruf</FormErrorMessage>
-                )}
               </FormControl>
             </SimpleGrid>
           </ModalBody>
@@ -178,7 +181,7 @@ const Insentif = () => {
       <ContentWrapper>
         <Flex alignItems={"center"}>
           <Heading as={"h5"} size={"md"}>
-            Pilih Karyawan
+            Pilih Pasien
           </Heading>
           <Spacer />
           {data === null && <Spinner color="green.300" mx={2} />}
@@ -193,7 +196,7 @@ const Insentif = () => {
             as={"form"}
             onSubmit={handleSubmit(onSearch)}
           >
-            <Input placeholder="Cari Karyawan..." {...register("search")} />
+            <Input placeholder="Cari Pasien..." {...register("search")} />
             <IconButton
               type="submit"
               aria-label="Search database"
@@ -202,17 +205,17 @@ const Insentif = () => {
           </HStack>
           <Spacer />
           <Button colorScheme={"twitter"} size={"sm"} onClick={onOpen}>
-            Tambah Karyawan
+            Tambah Pasien
           </Button>
         </Flex>
-        <Table head={["No", "Nama", "Email", "Aksi"]}>
+        <Table head={["No", "Nama", "Paket", "Aksi"]}>
           {data?.result?.map((item, i) => (
             <Tr key={item.id}>
               <Td>{i + 1}</Td>
-              <Td>{item.name}</Td>
-              <Td>{item.email}</Td>
+              <Td>{item.nama}</Td>
+              <Td>{item.paket}</Td>
               <Td>
-                <Link href={`/dashboard/karyawan/insentif/${item.id}`}>
+                <Link href={`/dashboard/paket-perawatan-luka/${item.id}`}>
                   Detail
                 </Link>
               </Td>
@@ -224,4 +227,4 @@ const Insentif = () => {
   );
 };
 
-export default Insentif;
+export default PaketPerawatanLuka;

@@ -8,7 +8,7 @@ export async function GET(req) {
 
   if (search) {
     result = await prisma.pasien.findMany({
-      skip,
+      skip: parseInt(skip),
       take: 5,
       where: {
         OR: [
@@ -23,10 +23,12 @@ export async function GET(req) {
     });
   } else {
     result = await prisma.pasien.findMany({
-      skip,
+      skip: parseInt(skip),
       take: 5,
     });
   }
+
+  console.log(result, skip);
 
   if (result) {
     return Response.json(result);

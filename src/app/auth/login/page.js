@@ -32,7 +32,7 @@ const Login = () => {
     setIsLoading(true);
     const res = await signIn("credentials", {
       username: data.email,
-      pasword: data.password,
+      password: data.password,
       callbackUrl: "/dashboard",
     });
 

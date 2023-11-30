@@ -2,7 +2,7 @@ import { PrismaAdapter } from "@next-auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import NextAuth from "next-auth";
 import prisma from "@/lib/prisma";
-
+import bcrypt, { compare } from "bcrypt";
 const handler = NextAuth({
   adapter: PrismaAdapter(prisma),
   providers: [
@@ -30,8 +30,16 @@ const handler = NextAuth({
             email: credentials.username,
           },
         });
-        console.log(user, "user");
-        if (user) {
+
+        console.log(user, credentials.password, "user");
+        if (!user) return null;
+
+        const comparePass = await bcrypt.compare(
+          credentials.password,
+          user.password
+        );
+        console.log(comparePass, "comp");
+        if (comparePass) {
           // Any object returned will be saved in `user` property of the JWT
 
           return user;

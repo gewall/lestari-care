@@ -7,6 +7,7 @@ import ContentWrapper from "@/components/dashboard/ContentWrapper";
 import {
   Box,
   Button,
+  ButtonGroup,
   Flex,
   HStack,
   Heading,
@@ -19,13 +20,18 @@ import {
   VStack,
 } from "@chakra-ui/react";
 import Table from "@/components/table/Table";
-import { AiOutlineSearch } from "react-icons/ai";
+import {
+  AiOutlineArrowLeft,
+  AiOutlineArrowRight,
+  AiOutlineSearch,
+} from "react-icons/ai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Link } from "@chakra-ui/next-js";
 
 const Assesment = () => {
   const [data, setData] = useState(null);
+  const [skip, setSkip] = useState(0);
 
   const {
     register,
@@ -60,6 +66,34 @@ const Assesment = () => {
     setData(res);
   };
 
+  const onNext = async (val) => {
+    let _skip = skip + val;
+    const req = await fetch(`/api/pasien?skip=${_skip}`);
+    const res = await req.json();
+
+    if (!req.ok) {
+      return;
+    }
+
+    setSkip(skip + val);
+    setData(res);
+  };
+
+  const onBack = async (val) => {
+    let _skip = skip - val;
+    const req = await fetch(`/api/pasien?skip=${_skip}`);
+    const res = await req.json();
+
+    if (!req.ok) {
+      return;
+    }
+
+    setSkip(skip - val);
+    setData(res);
+  };
+
+  console.log(skip);
+
   return (
     <DashboardLayout>
       <Header title={"Assesment"} />
@@ -72,14 +106,33 @@ const Assesment = () => {
           <Spacer />
           {data === null && <Spinner color="green.300" />}
         </Flex>
-        <HStack my={2} w={44} as={"form"} onSubmit={handleSubmit(onSearch)}>
-          <Input placeholder="Cari Pasien..." {...register("search")} />
-          <IconButton
-            type="submit"
-            aria-label="Search database"
-            icon={<AiOutlineSearch />}
-          />
-        </HStack>
+        <Flex alignItems={"center"}>
+          <HStack my={2} w={44} as={"form"} onSubmit={handleSubmit(onSearch)}>
+            <Input placeholder="Cari Pasien..." {...register("search")} />
+            <IconButton
+              type="submit"
+              aria-label="Search database"
+              icon={<AiOutlineSearch />}
+            />
+          </HStack>
+          <Spacer />
+          <ButtonGroup>
+            <IconButton
+              variant="outline"
+              colorScheme="teal"
+              onClick={() => onBack(5)}
+              size={"sm"}
+              icon={<AiOutlineArrowLeft />}
+            />
+            <IconButton
+              variant="outline"
+              colorScheme="teal"
+              size={"sm"}
+              onClick={() => onNext(5)}
+              icon={<AiOutlineArrowRight />}
+            />
+          </ButtonGroup>
+        </Flex>
         <Table
           head={[
             "No",

@@ -37,12 +37,12 @@ import React, { Fragment, useEffect, useState } from "react";
 const Detail = ({ params }) => {
   const router = useRouter();
   const [dataPasien, setDataPasien] = useState(null);
-  const [dataRiwayatAssesment, setDataRiwayatAssesment] = useState(null);
+  const [dataRiwayatPerawatan, setDataRiwayatPerawatan] = useState([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const getDataPasien = async () => {
-      const req = await fetch(`/api/pasien/${params.id}`);
+      const req = await fetch(`/api/pasien-perawatan/${params.id}`);
       const res = await req.json();
 
       if (!req.ok) {
@@ -52,28 +52,28 @@ const Detail = ({ params }) => {
       setDataPasien(res);
     };
 
-    const getRiwayatAsessment = async () => {
-      const req = await fetch(`/api/assesment`, {
-        method: "POST",
-        body: JSON.stringify({ id: params.id }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-      const res = await req.json();
+    // const getRiwayatPerawatan = async () => {
+    //   const req = await fetch(`/api/assesment`, {
+    //     method: "POST",
+    //     body: JSON.stringify({ id: params.id }),
+    //     headers: {
+    //       "Content-Type": "application/json",
+    //     },
+    //   });
+    //   const res = await req.json();
 
-      if (!req.ok) {
-        return;
-      }
+    //   if (!req.ok) {
+    //     return;
+    //   }
 
-      setDataRiwayatAssesment(res);
-    };
+    //   setDataRiwayatPerawatan(res);
+    // };
 
-    getRiwayatAsessment();
+    // getRiwayatPerawatan();
     getDataPasien();
   }, [params.id]);
 
-  console.log(dataRiwayatAssesment, "Pas");
+  console.log(dataRiwayatPerawatan, "Pas");
 
   return (
     <DashboardLayout>
@@ -91,85 +91,31 @@ const Detail = ({ params }) => {
               <Input
                 isReadOnly
                 type="text"
-                placeholder="Masukkan Nama Pasien"
+                // placeholder="Masukkan Nama Pasien"
                 value={dataPasien.nama}
               />
             </FormControl>
 
             <FormControl>
-              <FormLabel>No. Ktp</FormLabel>
-              <Input
-                isReadOnly
-                type="number"
-                placeholder="Masukkan No.Ktp Pasien"
-                value={dataPasien.noKtp}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>Usia</FormLabel>
-              <Input
-                isReadOnly
-                type="number"
-                placeHolder={"Masukkan Usia Pasien"}
-                value={dataPasien.usia}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>Jenis Kelamin</FormLabel>
+              <FormLabel>Paket</FormLabel>
               <Input
                 isReadOnly
                 type="text"
-                placeholder="Masukkan Tempat Lahir Pasien"
-                value={dataPasien.jenisKelamin}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>Tempat, Tanggal Lahir</FormLabel>
-              <Input
-                isReadOnly
-                type="text"
-                placeholder="Masukkan Tempat Lahir Pasien"
-                value={
-                  dataPasien.tempatLahir +
-                  ", " +
-                  dataPasien.tanggalLahir.slice(0, 10)
-                }
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>No. Telepon</FormLabel>
-              <Input
-                isReadOnly
-                type="number"
-                placeholder="Masukkan No.Telepon Pasien"
-                value={dataPasien.noTelepon}
-              />
-            </FormControl>
-
-            <FormControl>
-              <FormLabel>No. RM</FormLabel>
-              <Input
-                isReadOnly
-                type="text"
-                placeholder="Masukkan No.RM Pasien"
-                value={dataPasien.noRM}
+                // placeholder="Masukkan No.Ktp Pasien"
+                value={dataPasien.paket}
               />
             </FormControl>
           </SimpleGrid>
         )}
         <Flex my={2} flexDir={{ base: "column", md: "row" }}>
           <Heading as={"h5"} size={"md"}>
-            Riwayat Assesment
+            Riwayat Perawatan Luka
           </Heading>
           <Spacer />
           {/* <Link href={`/dashboard/assesment/${params.id}/tambah-assesment`}>
             Tambah Assesment
           </Link> */}
-          <Button
+          {/* <Button
             my={{ base: 2, md: 0 }}
             onClick={async () => {
               setLoading(true);
@@ -196,19 +142,19 @@ const Detail = ({ params }) => {
             isLoading={loading}
           >
             Tambah Assesment
-          </Button>
+          </Button> */}
         </Flex>
         <Box>
-          {dataRiwayatAssesment === null ? (
+          {dataRiwayatPerawatan === null ? (
             <HStack>
               <Text>Mohon Tunggu...</Text>
               <Spinner color="green.300" />
             </HStack>
-          ) : dataRiwayatAssesment.length === 0 ? (
+          ) : dataRiwayatPerawatan.length === 0 ? (
             <Text>Tidak Ada</Text>
           ) : (
             <Table head={["No", "Tanggal Assesment", "Aksi"]}>
-              {dataRiwayatAssesment?.map((item, i) => (
+              {dataRiwayatPerawatan?.map((item, i) => (
                 <Tr key={item.id}>
                   <Td>{i + 1}</Td>
                   <Td>{item.tanggal.slice(0, 10)}</Td>

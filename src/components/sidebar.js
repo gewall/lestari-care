@@ -21,6 +21,7 @@ import {
   AiOutlineFileSync,
   AiOutlineFileText,
   AiOutlineGold,
+  AiOutlineHeart,
   AiOutlineLineChart,
   AiOutlineRight,
   AiOutlineSafetyCertificate,
@@ -75,6 +76,12 @@ export default function Sidebar() {
           isShowed={isShowed}
           href={"/dashboard/assesment"}
         />
+        <SidebarLink
+          icon={AiOutlineHeart}
+          title={"Paket Perawatan Luka"}
+          isShowed={isShowed}
+          href={"/dashboard/paket-perawatan-luka"}
+        />
         {/* <SidebarLink
           icon={AiOutlineTeam}
           title={"Askep"}
@@ -109,7 +116,11 @@ export default function Sidebar() {
           isShowed={isShowed}
           subMenus={[
             { title: "BHP", icon: AiOutlineSync, href: "/dashboard/stok/bhp" },
-            { title: "Alkes", icon: AiOutlineSafetyCertificate, href: "#" },
+            {
+              title: "Alkes",
+              icon: AiOutlineSafetyCertificate,
+              href: "/dashboard/stok/alkes",
+            },
           ]}
         />
         {session?.user.role === "KARYAWAN" && (
@@ -133,7 +144,7 @@ export default function Sidebar() {
             icon={AiOutlineLineChart}
             title={"Laporan Keuangan"}
             isShowed={isShowed}
-            href={"/dashboard/laporan-keuangan"}
+            href={"/dashboard/keuangan"}
           />
         )}
       </VStack>
