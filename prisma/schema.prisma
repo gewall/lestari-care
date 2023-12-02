@@ -144,20 +144,41 @@ model KeuanganAssesment {
 }
 
 model BHP {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  nama          String
-  jumlahStok    Int
-  ukuran        Int
-  harga         Int
+  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  nama              String
+  jumlahStok        Int
+  ukuran            Int
+  harga             Int
+  keuanganStokBhp   KeuanganStokBhp[]
 }
 
 model Alkes {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
-  nama          String
-  jumlahStok    Int
-  ukuran        Int
-  harga         Int
+  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  nama                String
+  jumlahStok          Int
+  ukuran              Int
+  harga               Int
+  keuanganStokAlkes   KeuanganStokAlkes[]
 }
+
+model KeuanganStokAlkes {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  tanggal       DateTime?
+  nominal       Int 
+  tipe          String
+  alkes         Alkes         @relation(fields: [alkesId], references: [id])
+  alkesId       String        @db.ObjectId
+}
+
+model KeuanganStokBhp {
+  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  tanggal       DateTime?
+  nominal       Int 
+  tipe          String
+  bhp           BHP           @relation(fields: [bhpId], references: [id])
+  bhpId         String        @db.ObjectId
+}
+
 
 model Absensi {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
@@ -195,8 +216,27 @@ model PasienPerawatan {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
   nama          String
   paket         String
+  perawatan     Perawatan[]
 }
 
+model Perawatan {
+  id                       String                   @id @default(auto()) @map("_id") @db.ObjectId
+  biaya                    Int
+  tanggal                  DateTime?
+  deskripsi                String
+  pasienPerawatan          PasienPerawatan          @relation(fields: [pasienId], references: [id])
+  pasienId                 String                   @db.ObjectId
+}
+
+model Piutang {
+  id                       String                   @id @default(auto()) @map("_id") @db.ObjectId
+  namaPerusahaan           String                   
+  jenisProduk              String               
+  jumlah                   Int               
+  noFaktur                 String               
+  total                    Int     
+  status                   String          
+}
 enum Role {
   ADMIN
   KARYAWAN

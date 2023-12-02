@@ -7,7 +7,7 @@ const Paging = ({ api, setData }) => {
 
   const onNext = async (val) => {
     let _skip = skip + val;
-    const req = await fetch(`${api}skip=${_skip}`);
+    const req = await fetch(`${api}?skip=${_skip}`);
     const res = await req.json();
 
     if (!req.ok) {
@@ -20,7 +20,7 @@ const Paging = ({ api, setData }) => {
 
   const onBack = async (val) => {
     let _skip = skip - val;
-    const req = await fetch(`${api}skip=${_skip}`);
+    const req = await fetch(`${api}?skip=${_skip}`);
     const res = await req.json();
 
     if (!req.ok) {

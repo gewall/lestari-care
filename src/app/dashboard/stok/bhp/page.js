@@ -102,6 +102,7 @@ const StokBHP = () => {
         duration: 9000,
         isClosable: true,
       });
+      perbaruiData();
     } else {
       toast({
         title: "Gagal Menyimpan Data.",

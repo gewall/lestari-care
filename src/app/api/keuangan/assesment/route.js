@@ -5,13 +5,13 @@ export async function GET(req) {
   const fromDate = sParams.get("fromDate");
   const toDate = sParams.get("toDate");
 
-  const result = await prisma.gajiKaryawan.findMany({
+  const result = await prisma.keuanganAssesment.findMany({
     select: {
-      nominal: true,
-      tanggal: true,
+      biaya: true,
+      tanggalBayar: true,
     },
     where: {
-      tanggal: {
+      tanggalBayar: {
         lte: new Date(toDate),
         gt: new Date(fromDate),
       },

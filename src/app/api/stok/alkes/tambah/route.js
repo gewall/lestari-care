@@ -12,9 +12,22 @@ export async function POST(req) {
     },
   });
 
+  if (!result) {
+    return Response.json({ error: "error", result: null });
+  }
+
+  const save = await prisma.keuanganStokAlkes.create({
+    data: {
+      tanggal: new Date(),
+      nominal: parseInt(result.harga * _data.jumlahStok),
+      alkesId: result.id,
+      tipe: "MASUK",
+    },
+  });
+
   //   biaya,tanggalBayar, assesmentId
 
-  if (result) {
+  if (save) {
     return Response.json({ result });
   } else {
     return Response.json({ error: "error", result: null });
