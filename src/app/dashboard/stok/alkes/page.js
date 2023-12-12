@@ -23,6 +23,7 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Select,
   SimpleGrid,
   Spacer,
   Spinner,
@@ -258,9 +259,19 @@ const StokAlkes = () => {
                 />
               </FormControl>
               <FormControl>
+                <FormLabel>Tipe Stok</FormLabel>
+                <Select
+                  placeholder="Pilih Tipe Ukuran"
+                  {...registerStock("tipeStok", { required: true })}
+                >
+                  <option value="Satuan">Satuan</option>
+                  <option value="Box">Box</option>
+                </Select>
+              </FormControl>
+              <FormControl>
                 <FormLabel>Ukuran</FormLabel>
                 <Input
-                  type="number"
+                  type="text"
                   placeholder="Masukkan Ukuran Barang"
                   {...registerStock("ukuran", { required: true })}
                 />
@@ -377,13 +388,14 @@ const StokAlkes = () => {
             Tambah Barang
           </Button>
         </Flex>
-        <Table head={["No", "Nama", "Stok", "Ukuran", "Harga", "Aksi"]}>
+        <Table head={["No", "Nama", "Stok", "Ukuran","Tipe", "Harga", "Aksi"]}>
           {data?.map((item, i) => (
             <Tr key={item.id}>
               <Td>{i + 1}</Td>
               <Td>{item.nama}</Td>
               <Td>{item.jumlahStok}</Td>
               <Td>{item.ukuran}</Td>
+              <Td>{item.tipeStok}</Td>
               <Td>
                 {new Intl.NumberFormat("id-ID", {
                   style: "currency",

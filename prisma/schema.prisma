@@ -147,7 +147,8 @@ model BHP {
   id                String    @id @default(auto()) @map("_id") @db.ObjectId
   nama              String
   jumlahStok        Int
-  ukuran            Int
+  ukuran            String
+  tipeStok          String
   harga             Int
   keuanganStokBhp   KeuanganStokBhp[]
 }
@@ -156,7 +157,8 @@ model Alkes {
   id                  String    @id @default(auto()) @map("_id") @db.ObjectId
   nama                String
   jumlahStok          Int
-  ukuran              Int
+  ukuran              String
+  tipeStok            String
   harga               Int
   keuanganStokAlkes   KeuanganStokAlkes[]
 }
@@ -192,6 +194,7 @@ model Homecare {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
   deskripsi     String?
   tanggal       DateTime?
+  bagian        String
   user          User          @relation(fields: [userId], references: [id])
   userId        String        @db.ObjectId
 }
@@ -200,6 +203,7 @@ model Homevisit {
   id            String        @id @default(auto()) @map("_id") @db.ObjectId
   deskripsi     String?
   tanggal       DateTime?
+  bagian        String
   user          User          @relation(fields: [userId], references: [id])
   userId        String        @db.ObjectId
 }

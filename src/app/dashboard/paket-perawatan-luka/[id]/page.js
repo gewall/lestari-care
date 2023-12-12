@@ -6,6 +6,8 @@ import Table from "@/components/table/Table";
 import DashboardLayout from "@/layouts/dashboard";
 import { Link } from "@chakra-ui/next-js";
 import {
+  Alert,
+  AlertIcon,
   Box,
   Button,
   Flex,
@@ -221,6 +223,15 @@ const Detail = ({ params }) => {
             </FormControl>
           </SimpleGrid>
         )}
+
+        {dataRiwayatPerawatan?.result?.length === 10 && (
+          <Box my={2}>
+            <Alert status="info">
+              <AlertIcon />
+              Pasien ini sudah melakukan perawatan sebanyak 10x!
+            </Alert>
+          </Box>
+        )}
         <Flex my={2} flexDir={{ base: "column", md: "row" }}>
           <Heading as={"h5"} size={"md"}>
             Riwayat Perawatan Luka
@@ -247,13 +258,30 @@ const Detail = ({ params }) => {
           ) : dataRiwayatPerawatan?.result?.length === 0 ? (
             <Text>Tidak Ada</Text>
           ) : (
-            <Table head={["No", "Deskripsi", "Tanggal Perawatan", "Biaya"]}>
+            <Table
+              head={["No", "Deskripsi", "Tanggal Perawatan", "Biaya", "Aksi"]}
+            >
               {dataRiwayatPerawatan?.result?.map((item, i) => (
                 <Tr key={item.id}>
                   <Td>{i + 1}</Td>
                   <Td>{item.deskripsi}</Td>
                   <Td>{item.tanggal.slice(0, 10)}</Td>
-                  <Td>{item.biaya}</Td>
+                  <Td>
+                    {new Intl.NumberFormat("id-ID", {
+                      style: "currency",
+                      currency: "IDR",
+                    }).format(item.biaya)}
+                  </Td>
+                  <Td>
+                    <Button
+                      as={Link}
+                      href={`/dashboard/paket-perawatan-luka/${params.id}/${item.id}`}
+                      colorScheme={"twitter"}
+                      size={"sm"}
+                    >
+                      Ubah
+                    </Button>
+                  </Td>
                 </Tr>
               ))}
             </Table>

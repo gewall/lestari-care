@@ -12,14 +12,18 @@ import {
   Heading,
   Input,
   VStack,
+  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSession, signIn } from "next-auth/react";
 import prisma from "@/lib/prisma";
+import { useRouter } from "next/navigation";
 
 const Login = () => {
+  const router = useRouter();
   const { data: session } = useSession();
+  const toast = useToast();
   const [isLoading, setIsLoading] = useState(false);
   const {
     register,
@@ -34,13 +38,22 @@ const Login = () => {
       username: data.email,
       password: data.password,
       callbackUrl: "/dashboard",
+      redirect: false,
     });
 
     setIsLoading(false);
-    if (res?.error) {
-      console.log("error");
+    if (res?.ok) {
+      console.log("ok");
+      router.push("/dashboard");
     } else {
-      console.log("sukses");
+      // console.log("sukses");
+      toast({
+        title: "Tidak Dapat Masuk",
+        description: "Email Atau Password Salah",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
     }
   };
 
@@ -75,9 +88,9 @@ const Login = () => {
           )}
         </FormControl>
         <ButtonGroup>
-          <Button colorScheme={"twitter"} onClick={getData}>
+          {/* <Button colorScheme={"twitter"} onClick={getData}>
             Daftar
-          </Button>
+          </Button> */}
           <Button colorScheme={"whatsapp"} type="submit" isLoading={isLoading}>
             Masuk
           </Button>

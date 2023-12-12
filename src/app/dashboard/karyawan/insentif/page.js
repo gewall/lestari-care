@@ -73,7 +73,7 @@ const Insentif = () => {
   }, []);
 
   const onSearch = async (e) => {
-    const req = await fetch(`/api/pasien?search=${e.search}`);
+    const req = await fetch(`/api/karyawan?search=${e.search}`);
     const res = await req.json();
 
     if (!req.ok) {
@@ -100,6 +100,7 @@ const Insentif = () => {
         duration: 9000,
         isClosable: true,
       });
+      refreshData();
     } else {
       toast({
         title: "Gagal Menambah Data.",
@@ -113,7 +114,17 @@ const Insentif = () => {
     setLoadingTambah(false);
   };
 
-  console.log(data);
+  const refreshData = async () => {
+    const req = await fetch("/api/karyawan");
+    const res = await req.json();
+
+    if (!req.ok) {
+      return;
+    }
+
+    setData(res);
+  };
+
   return (
     <DashboardLayout>
       <Header title={"Insentif"} />

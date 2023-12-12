@@ -33,6 +33,7 @@ import { useState } from "react";
 import SidebarLink from "./SidebarLink";
 import { useSession } from "next-auth/react";
 import SidebarSubLink from "./SidebarSubLink";
+import { CldImage } from "next-cloudinary";
 
 export default function Sidebar() {
   const [isShowed, setIsShowed] = useState(true);
@@ -54,8 +55,13 @@ export default function Sidebar() {
       transition={"all ease-in-out .5s"}
       direction={"column"}
     >
-      <Center py={8}>
-        <Text>Lestari Care(Logo)</Text>
+      <Center py={4}>
+        <CldImage
+          width="64"
+          height="64"
+          src="klinik/jgnnrrotszalwdnrgtqj"
+          style={{ borderRadius: "100%" }}
+        />
       </Center>
       <VStack w={"full"} alignItems={"flex-start"} overflowY={"auto"} flex={1}>
         <SidebarLink

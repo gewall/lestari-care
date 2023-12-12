@@ -5,13 +5,14 @@ import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
+  Icon,
   Text,
 } from "@chakra-ui/react";
 import { AiOutlineDoubleRight } from "react-icons/ai";
 const DBreadcrumb = ({ links }) => {
   return (
     <Breadcrumb flexWrap={"wrap"} overflow={"hidden"} maxW={"75vw"}>
-      <AiOutlineDoubleRight />
+      <Icon as={AiOutlineDoubleRight} />
       {links.map((item, i) => {
         // console.log(i, links.length);
         return (

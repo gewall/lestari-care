@@ -198,6 +198,7 @@ export default function Dashboard() {
                 series={assesmentChart.series}
                 type="line"
                 width="100%"
+                height={300}
               />
             </Box>
           </Fragment>

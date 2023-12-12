@@ -7,7 +7,7 @@ export async function POST(req) {
     data: {
       ..._data,
       jumlahStok: parseInt(_data.jumlahStok),
-      ukuran: parseInt(_data.ukuran),
+
       harga: parseInt(_data.harga),
     },
   });

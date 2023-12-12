@@ -161,6 +161,15 @@ const Detail = ({ params }) => {
             </FormControl>
           </SimpleGrid>
         )}
+        <Box my={4}>
+          <Button
+            as={Link}
+            colorScheme={"twitter"}
+            href={`/dashboard/pendaftaran-pasien/${dataPasien?.id}`}
+          >
+            Ubah Data Pasien
+          </Button>
+        </Box>
         <Flex my={2} flexDir={{ base: "column", md: "row" }}>
           <Heading as={"h5"} size={"md"}>
             Riwayat Assesment

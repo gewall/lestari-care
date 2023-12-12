@@ -2,20 +2,11 @@ import prisma from "@/lib/prisma";
 
 export async function GET(req, { params }) {
   const id = params.id;
-  const result = await prisma.absensi.findFirst({
+  const result = await prisma.absensi.findMany({
     where: {
-      AND: [
-        {
-          userId: id,
-        },
-        {
-          tanggal: { lte: new Date() },
-        },
-      ],
+      userId: id,
     },
   });
-
-  console.log(result, "asdd");
 
   if (result) {
     return Response.json({ result });

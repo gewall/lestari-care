@@ -65,9 +65,12 @@ const Detail = ({ params }) => {
   const [loading, setLoading] = useState(false);
   const [loadingHomecare, setLoadingHomecare] = useState(false);
   const [loadingHomevisit, setLoadingHomevisit] = useState(false);
-  const [selectedDates, setSelectedDates] = useState([new Date(), new Date()]);
-  const [selectedDates1, setSelectedDates1] = useState([
+  const [selectedDates, setSelectedDates] = useState([
+    new Date(new Date().setMonth(new Date().getMonth() - 1)),
     new Date(),
+  ]);
+  const [selectedDates1, setSelectedDates1] = useState([
+    new Date(new Date().setMonth(new Date().getMonth() - 1)),
     new Date(),
   ]);
   const [dataHomecare, setDataHomecare] = useState({ result: [] });

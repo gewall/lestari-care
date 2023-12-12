@@ -82,9 +82,14 @@ const Absensi = () => {
     const cekAbsen = async () => {
       const req = await fetch(`/api/karyawan/absensi/${session?.user?.id}`);
       const res = await req.json();
-
       if (res.result) {
-        setIsAbsented(true);
+        setIsAbsented(
+          res.result?.some(
+            (i) =>
+              new Date(i.tanggal).toLocaleDateString().slice(0, 10) ===
+              new Date().toLocaleString().slice(0, 10)
+          )
+        );
       }
     };
 
@@ -92,7 +97,7 @@ const Absensi = () => {
       cekAbsen();
     }
   }, [session?.user?.id]);
-  //   console.log(data);
+
   return (
     <DashboardLayout>
       <Header title={"Absensi Karyawan"} />
