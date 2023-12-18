@@ -11,7 +11,10 @@ export async function GET(req) {
       skip: parseInt(skip),
       take: 5,
       where: {
-        namaPerusahaan: search,
+        namaPerusahaan: {
+          equals: search,
+          mode: "insensitive",
+        },
       },
     });
   } else {

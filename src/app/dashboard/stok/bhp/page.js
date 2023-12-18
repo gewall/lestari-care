@@ -39,6 +39,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Link } from "@chakra-ui/next-js";
+import Paging from "@/components/dashboard/Paging";
 
 const StokBHP = () => {
   const toast = useToast();
@@ -53,6 +54,12 @@ const StokBHP = () => {
     onOpen: onOpenTambah,
     onClose: onCloseTambah,
   } = useDisclosure();
+  const {
+    isOpen: isOpenHapus,
+    onOpen: onOpenHapus,
+    onClose: onCloseHapus,
+  } = useDisclosure();
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cekBarang, setCekBarang] = useState(false);
@@ -60,7 +67,7 @@ const StokBHP = () => {
   const [idTambah, setIdTambah] = useState(null);
   const [loadingAmbilStock, setLoadingAmbilStock] = useState(false);
   const [loadingTambahStock, setLoadingTambahStock] = useState(false);
-
+  const [loadingHapus, setLoadingHapus] = useState(false);
   const {
     register,
     handleSubmit,
@@ -126,7 +133,7 @@ const StokBHP = () => {
         return;
       }
 
-      setData(res.result);
+      setData(res);
     };
 
     getData();
@@ -140,7 +147,7 @@ const StokBHP = () => {
       return;
     }
 
-    setData(res.result);
+    setData(res);
   };
 
   const openAmbil = ({ id }) => {
@@ -151,6 +158,11 @@ const StokBHP = () => {
   const openTambah = ({ id }) => {
     setIdAmbil(id);
     onOpenTambah();
+  };
+
+  const openHapus = ({ id }) => {
+    setIdAmbil(id);
+    onOpenHapus();
   };
 
   const onAmbilBarang = async (e) => {
@@ -181,7 +193,7 @@ const StokBHP = () => {
       toast({
         title: "Gagal Mengubah Data.",
         description: "Data Stok Gagal Diubah.",
-        status: "success",
+        status: "error",
         duration: 9000,
         isClosable: true,
       });
@@ -212,7 +224,7 @@ const StokBHP = () => {
       toast({
         title: "Gagal Mengubah Data.",
         description: "Data Stok Gagal Diubah.",
-        status: "success",
+        status: "error",
         duration: 9000,
         isClosable: true,
       });
@@ -228,7 +240,36 @@ const StokBHP = () => {
       return;
     }
 
-    setData(res.result);
+    setData(res);
+  };
+
+  const onHapusBarang = async () => {
+    setLoadingHapus(true);
+    const data = { id: idAmbil };
+    const req = await fetch("/api/stok/bhp/hapus", {
+      method: "DELETE",
+      body: JSON.stringify(data),
+    });
+
+    if (req.ok) {
+      toast({
+        title: "Berhasil Menghapus Data.",
+        description: `Data Stok Berhasil Dihapus`,
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+      perbaruiData();
+    } else {
+      toast({
+        title: "Gagal Menghapus Data.",
+        description: "Data Stok Gagal Dihapus.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+    setLoadingHapus(false);
   };
 
   return (
@@ -355,6 +396,15 @@ const StokBHP = () => {
                 />
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
               </FormControl>
+              <FormControl>
+                <FormLabel>Harga Baru</FormLabel>
+                <Input
+                  type="number"
+                  placeholder="Masukkan Harga Baru Jika Ada"
+                  {...registerTambahStock("hargaBaru")}
+                />
+                {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
+              </FormControl>
             </SimpleGrid>
           </ModalBody>
 
@@ -373,9 +423,43 @@ const StokBHP = () => {
         </ModalContent>
       </Modal>
 
+      <Modal isOpen={isOpenHapus} onClose={onCloseHapus}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Hapus Barang</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Heading as={"h5"} size={"md"}>
+              Anda yakin ingin menghapus barang ini?
+            </Heading>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="twitter" mr={3} onClick={onCloseHapus}>
+              Batal
+            </Button>
+            <Button
+              colorScheme={"whatsapp"}
+              onClick={onHapusBarang}
+              isLoading={loadingHapus}
+            >
+              Hapus
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <ContentWrapper>
-        <Flex alignItems={"center"}>
-          <HStack my={2} w={44} as={"form"} onSubmit={handleSubmit(onSearch)}>
+        <Flex
+          alignItems={{ base: "flex-end", md: "center" }}
+          flexDir={{ base: "column", md: "row" }}
+        >
+          <HStack
+            my={2}
+            w={{ base: "full", md: 44 }}
+            as={"form"}
+            onSubmit={handleSubmit(onSearch)}
+          >
             <Input placeholder="Cari Barang..." {...register("search")} />
             <IconButton
               type="submit"
@@ -390,7 +474,7 @@ const StokBHP = () => {
           </Button>
         </Flex>
         <Table head={["No", "Nama", "Stok", "Ukuran", "Tipe", "Harga", "Aksi"]}>
-          {data?.map((item, i) => (
+          {data?.result?.map((item, i) => (
             <Tr key={item.id}>
               <Td>{i + 1}</Td>
               <Td>{item.nama}</Td>
@@ -421,11 +505,21 @@ const StokBHP = () => {
                   >
                     Tambah
                   </Button>
+                  <Button
+                    size={"sm"}
+                    colorScheme={"red"}
+                    onClick={() => openHapus({ id: item.id })}
+                  >
+                    Hapus
+                  </Button>
                 </ButtonGroup>
               </Td>
             </Tr>
           ))}
         </Table>
+        <Box my={4}>
+          <Paging api={"/api/stok/bhp"} setData={setData} />
+        </Box>
       </ContentWrapper>
     </DashboardLayout>
   );

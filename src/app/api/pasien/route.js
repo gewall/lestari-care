@@ -13,10 +13,16 @@ export async function GET(req) {
       where: {
         OR: [
           {
-            nama: search,
+            nama: {
+              equals: search,
+              mode: "insensitive",
+            },
           },
           {
-            noRM: search,
+            noRM: {
+              equals: search,
+              mode: "insensitive",
+            },
           },
         ],
       },

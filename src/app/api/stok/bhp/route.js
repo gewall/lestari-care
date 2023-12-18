@@ -8,15 +8,18 @@ export async function GET(req) {
 
   if (search) {
     result = await prisma.bHP.findMany({
-      skip,
+      skip: parseInt(skip),
       take: 5,
       where: {
-        nama: search,
+        nama: {
+          equals: search,
+          mode: "insensitive",
+        },
       },
     });
   } else {
     result = await prisma.bHP.findMany({
-      skip,
+      skip: parseInt(skip),
       take: 5,
     });
   }

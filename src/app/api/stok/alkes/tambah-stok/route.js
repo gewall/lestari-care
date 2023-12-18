@@ -13,14 +13,36 @@ export async function PUT(req) {
     return Response.json({ error: "error", result: null });
   }
 
-  const result = await prisma.alkes.update({
-    where: {
-      id: _data.id,
-    },
-    data: {
-      jumlahStok: parseInt(find.jumlahStok) + parseInt(_data.tambah),
-    },
-  });
+  let result;
+  //  = await prisma.alkes.update({
+  //   where: {
+  //     id: _data.id,
+  //   },
+  //   data: {
+  //     jumlahStok: parseInt(find.jumlahStok) + parseInt(_data.tambah),
+  //   },
+  // });
+
+  if (_data.hargaBaru.length === 0) {
+    result = await prisma.alkes.update({
+      where: {
+        id: _data.id,
+      },
+      data: {
+        jumlahStok: parseInt(find.jumlahStok) + parseInt(_data.tambah),
+      },
+    });
+  } else {
+    result = await prisma.alkes.update({
+      where: {
+        id: _data.id,
+      },
+      data: {
+        jumlahStok: parseInt(find.jumlahStok) + parseInt(_data.tambah),
+        harga: parseInt(_data.hargaBaru),
+      },
+    });
+  }
 
   if (!result) {
     return Response.json({ error: "error", result: null });

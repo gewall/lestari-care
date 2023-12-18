@@ -39,6 +39,7 @@ import { AiOutlineSearch } from "react-icons/ai";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { Link } from "@chakra-ui/next-js";
+import Paging from "@/components/dashboard/Paging";
 
 const StokAlkes = () => {
   const toast = useToast();
@@ -53,6 +54,12 @@ const StokAlkes = () => {
     onOpen: onOpenTambah,
     onClose: onCloseTambah,
   } = useDisclosure();
+  const {
+    isOpen: isOpenHapus,
+    onOpen: onOpenHapus,
+    onClose: onCloseHapus,
+  } = useDisclosure();
+
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [cekBarang, setCekBarang] = useState(false);
@@ -60,7 +67,7 @@ const StokAlkes = () => {
   const [idTambah, setIdTambah] = useState(null);
   const [loadingAmbilStock, setLoadingAmbilStock] = useState(false);
   const [loadingTambahStock, setLoadingTambahStock] = useState(false);
-
+  const [loadingHapus, setLoadingHapus] = useState(false);
   const {
     register,
     handleSubmit,
@@ -126,7 +133,7 @@ const StokAlkes = () => {
         return;
       }
 
-      setData(res.result);
+      setData(res);
     };
 
     getData();
@@ -140,7 +147,7 @@ const StokAlkes = () => {
       return;
     }
 
-    setData(res.result);
+    setData(res);
   };
 
   const openAmbil = ({ id }) => {
@@ -228,7 +235,41 @@ const StokAlkes = () => {
       return;
     }
 
-    setData(res.result);
+    setData(res);
+  };
+
+  const onHapusBarang = async () => {
+    setLoadingHapus(true);
+    const data = { id: idAmbil };
+    const req = await fetch("/api/stok/alkes/hapus", {
+      method: "DELETE",
+      body: JSON.stringify(data),
+    });
+
+    if (req.ok) {
+      toast({
+        title: "Berhasil Menghapus Data.",
+        description: `Data Stok Berhasil Dihapus`,
+        status: "success",
+        duration: 9000,
+        isClosable: true,
+      });
+      perbaruiData();
+    } else {
+      toast({
+        title: "Gagal Menghapus Data.",
+        description: "Data Stok Gagal Dihapus.",
+        status: "error",
+        duration: 9000,
+        isClosable: true,
+      });
+    }
+    setLoadingHapus(false);
+  };
+
+  const openHapus = ({ id }) => {
+    setIdAmbil(id);
+    onOpenHapus();
   };
 
   return (
@@ -352,7 +393,16 @@ const StokAlkes = () => {
                   placeholder="Masukkan Kuantitas Barang"
                   {...registerTambahStock("tambah", { required: true })}
                 />
+
                 {/* <FormHelperText>We'll never share your email.</FormHelperText> */}
+              </FormControl>
+              <FormControl>
+                <FormLabel>Harga Baru</FormLabel>
+                <Input
+                  type="number"
+                  placeholder="Masukkan Harga Baru Jika Ada"
+                  {...registerTambahStock("hargaBaru")}
+                />
               </FormControl>
             </SimpleGrid>
           </ModalBody>
@@ -372,9 +422,43 @@ const StokAlkes = () => {
         </ModalContent>
       </Modal>
 
+      <Modal isOpen={isOpenHapus} onClose={onCloseHapus}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>Hapus Barang</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Heading as={"h5"} size={"md"}>
+              Anda yakin ingin menghapus barang ini?
+            </Heading>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button colorScheme="twitter" mr={3} onClick={onCloseHapus}>
+              Batal
+            </Button>
+            <Button
+              colorScheme={"whatsapp"}
+              onClick={onHapusBarang}
+              isLoading={loadingHapus}
+            >
+              Hapus
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
       <ContentWrapper>
-        <Flex alignItems={"center"}>
-          <HStack my={2} w={44} as={"form"} onSubmit={handleSubmit(onSearch)}>
+        <Flex
+          alignItems={{ base: "flex-end", md: "center" }}
+          flexDir={{ base: "column", md: "row" }}
+        >
+          <HStack
+            my={2}
+            w={{ base: "full", md: 44 }}
+            as={"form"}
+            onSubmit={handleSubmit(onSearch)}
+          >
             <Input placeholder="Cari Barang..." {...register("search")} />
             <IconButton
               type="submit"
@@ -388,8 +472,8 @@ const StokAlkes = () => {
             Tambah Barang
           </Button>
         </Flex>
-        <Table head={["No", "Nama", "Stok", "Ukuran","Tipe", "Harga", "Aksi"]}>
-          {data?.map((item, i) => (
+        <Table head={["No", "Nama", "Stok", "Ukuran", "Tipe", "Harga", "Aksi"]}>
+          {data?.result?.map((item, i) => (
             <Tr key={item.id}>
               <Td>{i + 1}</Td>
               <Td>{item.nama}</Td>
@@ -420,11 +504,21 @@ const StokAlkes = () => {
                   >
                     Tambah
                   </Button>
+                  <Button
+                    size={"sm"}
+                    colorScheme={"red"}
+                    onClick={() => openHapus({ id: item.id })}
+                  >
+                    Hapus
+                  </Button>
                 </ButtonGroup>
               </Td>
             </Tr>
           ))}
         </Table>
+        <Box my={4}>
+          <Paging api={"/api/stok/alkes"} setData={setData} />
+        </Box>
       </ContentWrapper>
     </DashboardLayout>
   );

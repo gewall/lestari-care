@@ -19,6 +19,7 @@ const Paging = ({ api, setData }) => {
   };
 
   const onBack = async (val) => {
+    if (skip === 0) return;
     let _skip = skip - val;
     const req = await fetch(`${api}?skip=${_skip}`);
     const res = await req.json();

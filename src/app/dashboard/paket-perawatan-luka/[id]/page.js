@@ -90,13 +90,13 @@ const Detail = ({ params }) => {
 
   const onSubmit = async (e) => {
     setLoading(true);
-    const data = {
-      ...e,
-      tanggal: new Date(),
-    };
+    // const data = {
+    //   ...e,
+    //   tanggal: new Date(),
+    // };
     const req = await fetch(`/api/pasien-perawatan/${params.id}/tambah`, {
       method: "POST",
-      body: JSON.stringify(data),
+      body: JSON.stringify(e),
     });
     const res = await req.json();
 
@@ -172,6 +172,15 @@ const Detail = ({ params }) => {
                   {...register("deskripsi", { required: true })}
                 />
               </FormControl>
+              <FormControl>
+                <FormLabel>Tanngal Pemeriksaan</FormLabel>
+                <Input
+                  type="date"
+                  placeholder="Masukkan Tanggal Perawatan"
+                  {...register("tanggal", { required: true })}
+                />
+              </FormControl>
+
               <FormControl>
                 <FormLabel>Biaya</FormLabel>
                 <Input

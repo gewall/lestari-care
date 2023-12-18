@@ -33,17 +33,19 @@ const UbahPerawatanPasien = ({ params }) => {
     register,
     handleSubmit,
     watch,
+    reset,
     formState: { errors },
   } = useForm();
 
   const onSubmit = async (e) => {
+    console.log(e);
     setLoading(true);
     const data = { ...e };
     const req = await fetch(
       `/api/pasien-perawatan/${params.id}/perawatan/${params.perid}/ubah`,
       {
         method: "PUT",
-        body: JSON.stringify(data),
+        body: JSON.stringify(e),
         headers: {
           "Content-Type": "application/json",
         },
@@ -83,6 +85,8 @@ const UbahPerawatanPasien = ({ params }) => {
       if (!req.ok) {
         return;
       }
+
+      reset(res);
 
       setDate(new Date(res?.tanggal));
 
@@ -147,19 +151,15 @@ const UbahPerawatanPasien = ({ params }) => {
             </FormControl>
             <FormControl>
               <FormLabel>Deskripsi</FormLabel>
-              <Textarea
-                type="text"
-                defaultValue={data?.deskripsi}
-                {...register("deskripsi")}
-              />
+              <Textarea type="text" {...register("deskripsi")} />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Tanggal Perawatan</FormLabel>
+              <Input type="date" {...register("tanggal")} />
             </FormControl>
             <FormControl>
               <FormLabel>Biaya</FormLabel>
-              <Input
-                type="number"
-                defaultValue={data?.biaya}
-                {...register("biaya")}
-              />
+              <Input type="number" {...register("biaya")} />
             </FormControl>
           </SimpleGrid>
           <ButtonGroup my={4}>

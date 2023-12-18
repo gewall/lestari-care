@@ -13,7 +13,10 @@ export async function GET(req) {
       skip,
       take: 5,
       where: {
-        nama: search,
+        nama: {
+          equals: search,
+          mode: "insensitive",
+        },
       },
     });
   } else {

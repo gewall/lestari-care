@@ -1,14 +1,16 @@
 import prisma from "@/lib/prisma";
 
-export async function POST(req, { params }) {
+export async function DELETE(req) {
   const _data = await req.json();
 
-  const result = await prisma.perawatan.create({
-    data: {
-      ..._data,
-      pasienId: params.id,
-      biaya: parseInt(_data.biaya),
-      tanggal: new Date(_data.tanggal),
+  const deleteM = await prisma.keuanganStokBhp.deleteMany({
+    where: {
+      bhpId: _data.id,
+    },
+  });
+  const result = await prisma.bHP.delete({
+    where: {
+      id: _data.id,
     },
   });
 

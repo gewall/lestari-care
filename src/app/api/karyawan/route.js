@@ -17,7 +17,15 @@ export async function GET(req) {
   if (search) {
     result = await prisma.user.findMany({
       where: {
-        AND: [{ role: "KARYAWAN" }, { name: search }],
+        AND: [
+          { role: "KARYAWAN" },
+          {
+            nama: {
+              equals: search,
+              mode: "insensitive",
+            },
+          },
+        ],
       },
       skip,
       take: 5,

@@ -11,6 +11,7 @@ export async function PUT(req, { params }) {
     data: {
       biaya: parseInt(_data.biaya),
       deskripsi: _data.deskripsi,
+      tanggal: new Date(_data.tanggal),
     },
   });
 
