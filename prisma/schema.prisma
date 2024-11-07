@@ -1,21 +1,20 @@
 // This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// adapted for Supabase (PostgreSQL)
 
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
 }
 
-
-
 model User {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String       @id @default(uuid()) @db.Uuid
   name          String?
-  email         String?   @unique
+  email         String?      @unique
   role          String?
   password      String?
   absensi       Absensi[]
@@ -25,23 +24,23 @@ model User {
 }
 
 model Pasien {
-  id            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(uuid()) @db.Uuid
   nama          String
-  noKtp         Int
+  noKtp         String
   usia          Int
   jenisKelamin  String
   tempatLahir   String
   tanggalLahir  DateTime?
-  noTelepon     Int
-  noRM          String?   @unique
+  noTelepon     String
+  noRM          String?       @unique
   assesments    Assesment[]
 }
 
 model Assesment {
-  id                    String          @id @default(auto()) @map("_id") @db.ObjectId
+  id                    String           @id @default(uuid()) @db.Uuid
   tanggal               DateTime?
-  pasien                Pasien          @relation(fields: [pasienId], references: [id])
-  pasienId              String          @db.ObjectId
+  pasien                Pasien           @relation(fields: [pasienId], references: [id])
+  pasienId              String           @db.Uuid
   pengkajianUmum        PengkajianUmum?
   lokalLuka             LokalLuka?
   ttv                   Ttv?
@@ -50,9 +49,8 @@ model Assesment {
   keuanganAssesment     KeuanganAssesment?
 }
 
-
 model PengkajianUmum {
-  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                            String    @id @default(uuid()) @db.Uuid
   riwayatKejadianLuka           String
   faktorPenyulitPenyembuhan     String
   statusNutrisi                 String
@@ -64,22 +62,22 @@ model PengkajianUmum {
   obatObatan                    String
   merokok                       String
   assesment                     Assesment @relation(fields: [assesmentId], references: [id])
-  assesmentId                   String    @unique @db.ObjectId
+  assesmentId                   String    @unique @db.Uuid
 }
 
 model LokalLuka {
-  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                            String    @id @default(uuid()) @db.Uuid
   tipeLuka                      String
   tipePenyembuhanLuka           String
   kunjungan                     Int
   tanggalKunjungan              DateTime?
   foto                          String
   assesment                     Assesment @relation(fields: [assesmentId], references: [id])
-  assesmentId                   String    @unique @db.ObjectId
+  assesmentId                   String    @unique @db.Uuid
 }
 
 model Ttv {
-  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                            String    @id @default(uuid()) @db.Uuid
   tekananDarah                  String
   nadi                          String
   pernafasan                    String
@@ -87,11 +85,11 @@ model Ttv {
   gds                           String
   hasilAbpi                     String
   assesment                     Assesment @relation(fields: [assesmentId], references: [id])
-  assesmentId                   String    @unique @db.ObjectId
+  assesmentId                   String    @unique @db.Uuid
 }
 
 model Luka {
-  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                            String    @id @default(uuid()) @db.Uuid
   stadiumLuka                   String
   ukuranLuka                    String
   goa                           String
@@ -107,11 +105,11 @@ model Luka {
   pemeriksaanPenunjangTambahan  String
   foto                          String
   assesment                     Assesment @relation(fields: [assesmentId], references: [id])
-  assesmentId                   String    @unique @db.ObjectId
+  assesmentId                   String    @unique @db.Uuid
 }
 
 model TujuanPerawatan {
-  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                            String    @id @default(uuid()) @db.Uuid
   angkatJaringan                Boolean
   angkatBendaAsing              Boolean
   rangsangGranulasi             Boolean
@@ -132,19 +130,19 @@ model TujuanPerawatan {
   evaluase                      String
   rencanaTindakan               String
   assesment                     Assesment @relation(fields: [assesmentId], references: [id])
-  assesmentId                   String    @unique @db.ObjectId
+  assesmentId                   String    @unique @db.Uuid
 }
 
 model KeuanganAssesment {
-  id                            String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                            String    @id @default(uuid()) @db.Uuid
   biaya                         Int
   tanggalBayar                  DateTime
   assesment                     Assesment @relation(fields: [assesmentId], references: [id])
-  assesmentId                   String    @unique @db.ObjectId
+  assesmentId                   String    @unique @db.Uuid
 }
 
 model BHP {
-  id                String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                String        @id @default(uuid()) @db.Uuid
   nama              String
   jumlahStok        Int
   ukuran            String
@@ -154,7 +152,7 @@ model BHP {
 }
 
 model Alkes {
-  id                  String    @id @default(auto()) @map("_id") @db.ObjectId
+  id                  String        @id @default(uuid()) @db.Uuid
   nama                String
   jumlahStok          Int
   ukuran              String
@@ -164,76 +162,75 @@ model Alkes {
 }
 
 model KeuanganStokAlkes {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(uuid()) @db.Uuid
   tanggal       DateTime?
   nominal       Int 
   tipe          String
   alkes         Alkes         @relation(fields: [alkesId], references: [id])
-  alkesId       String        @db.ObjectId
+  alkesId       String        @db.Uuid
 }
 
 model KeuanganStokBhp {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(uuid()) @db.Uuid
   tanggal       DateTime?
   nominal       Int 
   tipe          String
   bhp           BHP           @relation(fields: [bhpId], references: [id])
-  bhpId         String        @db.ObjectId
+  bhpId         String        @db.Uuid
 }
 
-
 model Absensi {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(uuid()) @db.Uuid
   tanggal       DateTime?
   foto          String
   user          User          @relation(fields: [userId], references: [id])
-  userId        String        @db.ObjectId
+  userId        String        @db.Uuid
 }
 
 model Homecare {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(uuid()) @db.Uuid
   deskripsi     String?
   tanggal       DateTime?
   bagian        String
   user          User          @relation(fields: [userId], references: [id])
-  userId        String        @db.ObjectId
+  userId        String        @db.Uuid
 }
 
 model Homevisit {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(uuid()) @db.Uuid
   deskripsi     String?
   tanggal       DateTime?
   bagian        String
   user          User          @relation(fields: [userId], references: [id])
-  userId        String        @db.ObjectId
+  userId        String        @db.Uuid
 }
 
 model GajiKaryawan {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(uuid()) @db.Uuid
   tanggal       DateTime?
   nominal       Int
   user          User          @relation(fields: [userId], references: [id])
-  userId        String        @db.ObjectId
+  userId        String        @db.Uuid
 }
 
 model PasienPerawatan {
-  id            String        @id @default(auto()) @map("_id") @db.ObjectId
+  id            String        @id @default(uuid()) @db.Uuid
   nama          String
   paket         String
   perawatan     Perawatan[]
 }
 
 model Perawatan {
-  id                       String                   @id @default(auto()) @map("_id") @db.ObjectId
+  id                       String        @id @default(uuid()) @db.Uuid
   biaya                    Int
   tanggal                  DateTime?
   deskripsi                String
-  pasienPerawatan          PasienPerawatan          @relation(fields: [pasienId], references: [id])
-  pasienId                 String                   @db.ObjectId
+  pasienPerawatan          PasienPerawatan @relation(fields: [pasienId], references: [id])
+  pasienId                 String          @db.Uuid
 }
 
 model Piutang {
-  id                       String                   @id @default(auto()) @map("_id") @db.ObjectId
+  id                       String        @id @default(uuid()) @db.Uuid
   namaPerusahaan           String                   
   jenisProduk              String               
   jumlah                   Int               
@@ -241,6 +238,7 @@ model Piutang {
   total                    Int     
   status                   String          
 }
+
 enum Role {
   ADMIN
   KARYAWAN

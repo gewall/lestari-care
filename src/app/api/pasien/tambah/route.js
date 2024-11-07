@@ -4,9 +4,9 @@ export async function POST(req, res) {
   let data = await req.json();
   data = {
     ...data,
-    noKtp: parseInt(data.noKtp),
+ 
     usia: parseInt(data.usia),
-    noTelepon: parseInt(data.noTelepon),
+
   };
 
   const result = await prisma.pasien.create({

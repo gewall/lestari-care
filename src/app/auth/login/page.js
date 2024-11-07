@@ -46,7 +46,7 @@ const Login = () => {
       console.log("ok");
       router.push("/dashboard");
     } else {
-      // console.log("sukses");
+      console.log(res.error);
       toast({
         title: "Tidak Dapat Masuk",
         description: "Email Atau Password Salah",
